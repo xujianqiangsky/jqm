@@ -1,4 +1,4 @@
-package plus.jqm.api.service;
+package plus.jqm.common.core.constant.cache;
 
 /*
  * Copyright 2024 the original author or authors.
@@ -16,19 +16,23 @@ package plus.jqm.api.service;
  * limitations under the License.
  */
 
-import plus.jqm.api.domain.dto.SysRolePermissionDTO;
-import plus.jqm.api.domain.dto.SysUserDTO;
-import plus.jqm.common.core.domain.Result;
-
-import java.util.List;
-
 /**
- * 用户信息远程调用服务
+ * 缓存键值常量
  *
  * @author xujianqiang
- * @date 2024/09/08
+ * @date 2024/09/11
  */
-public interface SysUserRemoteService {
-    Result<SysUserDTO> getUserByUsername(String username);
-    Result<List<SysRolePermissionDTO>> getUserRoleAndPermissionById(Long id);
+public enum CacheConstants {
+    ROLE_CACHE_KEY_PREFIX("jqm:id-find-role:"),
+    PERMISSION_CACHE_KEY_PREFIX("jqm:role-find-permission:")
+    ;
+    private final String key;
+
+    CacheConstants(String key) {
+        this.key = key;
+    }
+
+    public String getKey() {
+        return key;
+    }
 }

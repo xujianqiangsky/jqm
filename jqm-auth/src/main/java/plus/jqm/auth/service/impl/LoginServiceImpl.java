@@ -26,8 +26,9 @@ import io.micrometer.common.util.StringUtils;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import plus.jqm.api.domain.SysUser;
+import plus.jqm.api.domain.dto.SysUserDTO;
 import plus.jqm.api.service.SysUserRemoteService;
 import plus.jqm.auth.domain.LoginUser;
 import plus.jqm.auth.domain.vo.TokenInfoVO;
@@ -35,8 +36,6 @@ import plus.jqm.auth.service.LoginService;
 import plus.jqm.common.core.constant.TokenExtraConstants;
 import plus.jqm.common.core.domain.Result;
 import plus.jqm.common.security.constant.AuthErrorCode;
-
-import java.util.Objects;
 
 /**
  * 用户登录服务实现
@@ -49,18 +48,18 @@ public class LoginServiceImpl implements LoginService {
     private static final Logger LOG = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @DubboReference
-    private SysUserRemoteService sysUserRemoteService;
+    private SysUserRemoteService userRemoteService;
 
     @Override
     public Result<TokenInfoVO> login(LoginUser loginUser) {
-        if (Objects.isNull(loginUser) || StringUtils.isBlank(loginUser.getUsername()) || StringUtils.isBlank(loginUser.getPassword())) {
+        if (loginUser == null || StringUtils.isEmpty(loginUser.getUsername()) || StringUtils.isEmpty(loginUser.getPassword())) {
             return Result.failure(AuthErrorCode.USERNAME_OR_PASSWORD_ERROR);
         }
 
         // 获取用户信息
-        Result<SysUser> result = sysUserRemoteService.getUserByUsername(loginUser.getUsername());
-        SysUser originalUser = result.getData();
-        if (Objects.isNull(originalUser)) {
+        Result<SysUserDTO> userDTOResult = userRemoteService.getUserByUsername(loginUser.getUsername());
+        SysUserDTO originalUser = userDTOResult.getData();
+        if (StringUtils.isEmpty(originalUser.getUsername())) {
             LOG.warn("Username: {} and exception: Username not found.", loginUser.getUsername());
             return Result.failure(AuthErrorCode.USERNAME_OR_PASSWORD_ERROR);
         }
@@ -72,10 +71,10 @@ public class LoginServiceImpl implements LoginService {
             SaLoginModel saLoginModel = new SaLoginModel();
             saLoginModel.setDevice(userAgent.getPlatform().getName());
             saLoginModel.setExtra(TokenExtraConstants.CURRENT_USERNAME_KEY.getKey(), loginUser.getUsername());
+            // 登录
             StpUtil.login(originalUser.getId(), saLoginModel);
             TokenInfoVO tokenInfoVO = new TokenInfoVO();
-            tokenInfoVO.setToken(StpUtil.getTokenValue());
-            tokenInfoVO.setLoginDevice(StpUtil.getLoginDevice());
+            BeanUtils.copyProperties(StpUtil.getTokenInfo(), tokenInfoVO);
             return Result.success(tokenInfoVO);
         }
 

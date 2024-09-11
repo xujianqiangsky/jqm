@@ -18,10 +18,17 @@ package plus.jqm.admin.service.impl.remote;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.beans.BeanUtils;
 import plus.jqm.admin.mapper.SysUserMapper;
+import plus.jqm.api.domain.SysRolePermission;
 import plus.jqm.api.domain.SysUser;
+import plus.jqm.api.domain.dto.SysRolePermissionDTO;
+import plus.jqm.api.domain.dto.SysUserDTO;
 import plus.jqm.api.service.SysUserRemoteService;
 import plus.jqm.common.core.domain.Result;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 用户信息远程调用服务实现
@@ -31,17 +38,35 @@ import plus.jqm.common.core.domain.Result;
  */
 @DubboService
 public class SysUserRemoteServiceImpl implements SysUserRemoteService {
-    private SysUserMapper sysUserMapper;
+    private SysUserMapper userMapper;
 
-    public SysUserRemoteServiceImpl(SysUserMapper sysUserMapper) {
-        this.sysUserMapper = sysUserMapper;
+    public SysUserRemoteServiceImpl(SysUserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
     @Override
-    public Result<SysUser> getUserByUsername(String username) {
-        LambdaQueryWrapper<SysUser> sysUserLambdaQueryWrapper = new LambdaQueryWrapper<>();
-        sysUserLambdaQueryWrapper.eq(SysUser::getUsername, username);
-        SysUser sysUser = sysUserMapper.selectOne(sysUserLambdaQueryWrapper);
-        return Result.success(sysUser);
+    public Result<SysUserDTO> getUserByUsername(String username) {
+        SysUserDTO userDTO = new SysUserDTO();
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUsername, username);
+        SysUser user = userMapper.selectOne(queryWrapper);
+        if (user != null) {
+            BeanUtils.copyProperties(user, userDTO);
+        }
+        return Result.success(userDTO);
+    }
+
+    @Override
+    public Result<List<SysRolePermissionDTO>> getUserRoleAndPermissionById(Long id) {
+        List<SysRolePermissionDTO> rolePermissionDTOList = new ArrayList<>();
+        List<SysRolePermission> rolePermissionList = userMapper.getRolePermissionByUserId(id);
+        if (rolePermissionList != null) {
+            for (SysRolePermission rolePermission : rolePermissionList) {
+                SysRolePermissionDTO rolePermissionDTO = new SysRolePermissionDTO();
+                BeanUtils.copyProperties(rolePermission, rolePermissionDTO);
+                rolePermissionDTOList.add(rolePermissionDTO);
+            }
+        }
+        return Result.success(rolePermissionDTOList);
     }
 }

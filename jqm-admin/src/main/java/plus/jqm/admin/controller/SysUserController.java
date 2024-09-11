@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import plus.jqm.admin.service.SysUserService;
+import plus.jqm.api.domain.vo.SysUserDetailVO;
 import plus.jqm.api.domain.vo.SysUserVO;
 import plus.jqm.common.core.domain.Result;
 
@@ -34,15 +35,21 @@ import plus.jqm.common.core.domain.Result;
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SysUserController {
-    private final SysUserService sysUserService;
+    private final SysUserService userService;
 
-    public SysUserController(SysUserService sysUserService) {
-        this.sysUserService = sysUserService;
+    public SysUserController(SysUserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/info")
     public Result<SysUserVO> getCurrentUserInfo() {
-        SysUserVO user = sysUserService.getUserById(StpUtil.getLoginId(-1L));
-        return Result.success(user);
+        SysUserVO userVO = userService.getUserById(StpUtil.getLoginId(-1L));
+        return Result.success(userVO);
+    }
+
+    @GetMapping("/detail")
+    public Result<SysUserDetailVO> getCurrentUserDetailInfo() {
+        SysUserDetailVO userDetailVO = userService.getUserDetailById(StpUtil.getLoginId(-1L));
+        return Result.success(userDetailVO);
     }
 }

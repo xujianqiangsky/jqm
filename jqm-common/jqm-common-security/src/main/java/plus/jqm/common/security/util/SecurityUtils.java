@@ -29,6 +29,6 @@ public final class SecurityUtils {
     private SecurityUtils() {}
 
     public static String getLoginUsername() {
-        return (String) StpUtil.getExtra(TokenExtraConstants.CURRENT_USERNAME_KEY.getKey());
+        return String.valueOf(StpUtil.getExtra(TokenExtraConstants.CURRENT_USERNAME_KEY.getKey()));
     }
 }

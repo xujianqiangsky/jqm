@@ -1,2 +1,3 @@
 plus.jqm.common.web.autoconfigure.cache.JQMRedisCacheAutoConfiguration
 plus.jqm.common.web.autoconfigure.jackson.JQMJacksonAutoConfiguration
+plus.jqm.common.web.autoconfigure.redis.JQMRedisTemplateAutoConfiguration

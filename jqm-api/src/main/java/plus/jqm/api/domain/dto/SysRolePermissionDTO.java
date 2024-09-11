@@ -1,4 +1,4 @@
-package plus.jqm.auth.domain.vo;
+package plus.jqm.api.domain.dto;
 
 /*
  * Copyright 2024 the original author or authors.
@@ -18,54 +18,55 @@ package plus.jqm.auth.domain.vo;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * token 信息
+ * 角色权限传输对象
  *
  * @author xujianqiang
- * @date 2024/09/08
+ * @date 2024/09/11
  */
-public class TokenInfoVO implements Serializable {
+public class SysRolePermissionDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String tokenValue;
-    private String loginDevice;
+    private String name;
+    private List<String> permissionList;
 
-    public String getTokenValue() {
-        return tokenValue;
+    public String getName() {
+        return name;
     }
 
-    public void setTokenValue(String tokenValue) {
-        this.tokenValue = tokenValue;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getLoginDevice() {
-        return loginDevice;
+    public List<String> getPermissionList() {
+        return permissionList;
     }
 
-    public void setLoginDevice(String loginDevice) {
-        this.loginDevice = loginDevice;
+    public void setPermissionList(List<String> permissionList) {
+        this.permissionList = permissionList;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TokenInfoVO that)) return false;
-        return Objects.equals(tokenValue, that.tokenValue) && Objects.equals(loginDevice, that.loginDevice);
+        if (!(o instanceof SysRolePermissionDTO that)) return false;
+        return Objects.equals(name, that.name) && Objects.equals(permissionList, that.permissionList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tokenValue, loginDevice);
+        return Objects.hash(name, permissionList);
     }
 
     @Override
     public String toString() {
-        return "TokenInfoVO{" +
-                "tokenValue='" + tokenValue + '\'' +
-                ", loginDevice='" + loginDevice + '\'' +
+        return "SysRolePermissionDTO{" +
+                "name='" + name + '\'' +
+                ", permissionList=" + permissionList +
                 '}';
     }
 }

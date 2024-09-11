@@ -30,7 +30,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
@@ -54,11 +53,8 @@ import plus.jqm.common.security.support.StpInterfaceImpl;
 public class JQMSaTokenAutoConfiguration implements WebMvcConfigurer {
     private static final Logger LOG = LoggerFactory.getLogger(JQMSaTokenAutoConfiguration.class);
 
-    @Autowired
-    ObjectMapper objectMapper;
-
     @Bean
-    public SaServletFilter getSaServletFilter() {
+    public SaServletFilter getSaServletFilter(ObjectMapper objectMapper) {
         return new SaServletFilter()
                 // 拦截地址
                 .addInclude("/**")

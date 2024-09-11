@@ -18,6 +18,7 @@ package plus.jqm.admin.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import plus.jqm.api.domain.SysUser;
+import plus.jqm.api.domain.vo.SysUserDetailVO;
 import plus.jqm.api.domain.vo.SysUserVO;
 
 /**
@@ -28,4 +29,5 @@ import plus.jqm.api.domain.vo.SysUserVO;
  */
 public interface SysUserService extends IService<SysUser> {
     SysUserVO getUserById(Long id);
+    SysUserDetailVO getUserDetailById(Long id);
 }

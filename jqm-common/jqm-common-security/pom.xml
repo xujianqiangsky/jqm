@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>plus.jqm</groupId>
-            <artifactId>jqm-common-core</artifactId>
+            <artifactId>jqm-api</artifactId>
         </dependency>
     </dependencies>
 
