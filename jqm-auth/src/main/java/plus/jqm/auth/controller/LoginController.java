@@ -17,6 +17,8 @@ package plus.jqm.auth.controller;
  */
 
 import cn.dev33.satoken.stp.StpUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import plus.jqm.auth.domain.LoginUser;
@@ -25,11 +27,12 @@ import plus.jqm.auth.service.LoginService;
 import plus.jqm.common.core.domain.Result;
 
 /**
- * 登录控制器
+ * 用户认证模块
  *
  * @author xujianqiang
  * @date 2024/09/07
  */
+@Tag(name = "用户认证模块")
 @RestController
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LoginController {
@@ -45,6 +48,7 @@ public class LoginController {
      * @param loginUser
      * @return
      */
+    @Operation(summary = "用户登录")
     @PostMapping("/login")
     public Result<TokenInfoVO> login(@RequestBody LoginUser loginUser) {
         return loginService.login(loginUser);
@@ -55,6 +59,7 @@ public class LoginController {
      *
      * @return
      */
+    @Operation(summary = "用户登出")
     @GetMapping("/logout")
     public Result<String> logout() {
         StpUtil.logout(StpUtil.getLoginId(), StpUtil.getLoginDevice());

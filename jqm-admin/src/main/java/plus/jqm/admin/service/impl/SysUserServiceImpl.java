@@ -16,19 +16,27 @@ package plus.jqm.admin.service.impl;
  * limitations under the License.
  */
 
+import cn.dev33.satoken.secure.BCrypt;
+import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import plus.jqm.admin.constant.CheckCondition;
+import plus.jqm.admin.exception.MobileNumberAlreadyExistsException;
+import plus.jqm.admin.exception.UsernameAlreadyExistsException;
 import plus.jqm.admin.mapper.SysUserMapper;
 import plus.jqm.admin.service.SysUserService;
 import plus.jqm.api.domain.SysMenu;
 import plus.jqm.api.domain.SysRole;
 import plus.jqm.api.domain.SysUser;
 import plus.jqm.api.domain.SysUserDetail;
+import plus.jqm.api.domain.dto.SysUserDTO;
 import plus.jqm.api.domain.vo.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 用户业务逻辑实现
@@ -47,7 +55,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUserVO getUserById(Long id) {
         SysUserVO userVO = new SysUserVO();
-        SysUser user = baseMapper.selectById(id);
+        SysUser user = getById(id);
         if (user != null) {
             BeanUtils.copyProperties(user, userVO);
         }
@@ -82,5 +90,67 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             userDetailVO.setMenuList(menuVOList);
         }
         return userDetailVO;
+    }
+
+    @Override
+    public void saveUser(SysUserDTO userDTO) {
+        checkUsernameAndMobileNumber(userDTO, CheckCondition.ALL);
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(userDTO, user);
+        String salt = BCrypt.gensalt();
+        String password = BCrypt.hashpw(user.getPassword(), salt);
+        user.setId(null);
+        user.setPassword(password);
+        user.setSalt(salt);
+        save(user);
+    }
+
+    @Override
+    public void updateUser(SysUserDTO userDTO) {
+        SysUser user = getById(userDTO.getId());
+        if (user != null) {
+            user.setName(userDTO.getName());
+            user.setDeptId(userDTO.getDeptId());
+            user.setGender(userDTO.getGender());
+            user.setAvatar(userDTO.getAvatar());
+            user.setEmail(userDTO.getEmail());
+            updateById(user);
+        }
+    }
+
+    @Override
+    public void updateLoginPassword(SysUserDTO userDTO) {
+        SysUser user = new SysUser();
+        String salt = BCrypt.gensalt();
+        String password = BCrypt.hashpw(userDTO.getPassword(), salt);
+        user.setId(StpUtil.getLoginIdAsLong());
+        user.setPassword(password);
+        user.setSalt(salt);
+        updateById(user);
+    }
+
+    @Override
+    public void updateLoginUserMobileNumber(SysUserDTO userDTO) {
+        checkUsernameAndMobileNumber(userDTO, CheckCondition.MOBILE_NUMBER);
+        SysUser user = new SysUser();
+        user.setId(StpUtil.getLoginIdAsLong());
+        user.setMobileNumber(userDTO.getMobileNumber());
+        updateById(user);
+    }
+
+    public void checkUsernameAndMobileNumber(SysUserDTO userDTO, CheckCondition condition) {
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SysUser::getUsername, userDTO.getUsername())
+                .or()
+                .eq(SysUser::getMobileNumber, userDTO.getMobileNumber());
+        List<SysUser> userList = list(queryWrapper);
+        for (SysUser user : userList) {
+            if ((condition.equals(CheckCondition.ALL) || condition.equals(CheckCondition.USERNAME)) && Objects.equals(user.getUsername(), userDTO.getUsername())) {
+                throw new UsernameAlreadyExistsException();
+            }
+            if ((condition.equals(CheckCondition.ALL) || condition.equals(CheckCondition.MOBILE_NUMBER)) && Objects.equals(user.getMobileNumber(), userDTO.getMobileNumber())) {
+                throw new MobileNumberAlreadyExistsException();
+            }
+        }
     }
 }

@@ -16,22 +16,26 @@ package plus.jqm.admin.controller;
  * limitations under the License.
  */
 
+import cn.dev33.satoken.annotation.SaCheckRole;
 import cn.dev33.satoken.stp.StpUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import plus.jqm.admin.service.SysUserService;
+import plus.jqm.api.domain.dto.SysUserDTO;
 import plus.jqm.api.domain.vo.SysUserDetailVO;
 import plus.jqm.api.domain.vo.SysUserVO;
 import plus.jqm.common.core.domain.Result;
 
 /**
- * 用户控制器
+ * 用户管理模块
  *
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Tag(name = "用户管理模块")
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class SysUserController {
@@ -41,15 +45,63 @@ public class SysUserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "获取登录用户信息")
     @GetMapping("/info")
-    public Result<SysUserVO> getCurrentUserInfo() {
-        SysUserVO userVO = userService.getUserById(StpUtil.getLoginId(-1L));
+    public Result<SysUserVO> getLoginUserInfo() {
+        SysUserVO userVO = userService.getUserById(StpUtil.getLoginIdAsLong());
         return Result.success(userVO);
     }
 
+    @Operation(summary = "获取登录用户详细信息")
     @GetMapping("/detail")
-    public Result<SysUserDetailVO> getCurrentUserDetailInfo() {
-        SysUserDetailVO userDetailVO = userService.getUserDetailById(StpUtil.getLoginId(-1L));
+    public Result<SysUserDetailVO> getLoginUserDetailInfo() {
+        SysUserDetailVO userDetailVO = userService.getUserDetailById(StpUtil.getLoginIdAsLong());
         return Result.success(userDetailVO);
+    }
+
+    @Operation(summary = "保存用户信息")
+    @SaCheckRole("administrator")
+    @PostMapping
+    public Result<String> saveUser(@RequestBody SysUserDTO userDTO) {
+        userService.saveUser(userDTO);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "修改登录用户信息")
+    @PutMapping
+    public Result<String> updateLoginUser(@RequestBody SysUserDTO userDTO) {
+        userDTO.setId(StpUtil.getLoginIdAsLong());
+        userService.updateUser(userDTO);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "修改登录用户密码")
+    @PutMapping("/passwd")
+    public Result<String> updateLoginPassword(@RequestBody SysUserDTO userDTO) {
+        userService.updateLoginPassword(userDTO);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "修改用户手机号码")
+    @PutMapping("/mobile")
+    public Result<String> updateLoginUserMobileNumber(@RequestBody SysUserDTO userDTO) {
+        userService.updateLoginUserMobileNumber(userDTO);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "获取指定用户信息")
+    @SaCheckRole("administrator")
+    @GetMapping("/info/{id}")
+    public Result<SysUserVO> getLoginUserInfo(@Parameter(name = "id", description = "用户 id") @PathVariable("id") Long id) {
+        SysUserVO userVO = userService.getUserById(id);
+        return Result.success(userVO);
+    }
+
+    @Operation(summary = "修改指定用户信息")
+    @SaCheckRole("administrator")
+    @PutMapping("/change")
+    public Result<String> updateUser(@RequestBody SysUserDTO userDTO) {
+        userService.updateUser(userDTO);
+        return Result.success("ok");
     }
 }

@@ -18,6 +18,7 @@ package plus.jqm.api.domain;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -30,20 +31,32 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Schema(description = "用户数据对象")
 public class SysDept implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "部门 id")
     private Long id;
+    @Schema(name = "name", description = "部门名称")
     private String name;
+    @Schema(name = "parentId", description = "部门所属父级 id")
     private Long parentId;
+    @Schema(name = "sortOrder", description = "排序", defaultValue = "0")
     private Integer sortOrder;
+    @Schema(name = "createdBy", description = "创建人")
+    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
+    @Schema(name = "createdTime", description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
+    @Schema(name = "updatedBy", description = "更新人")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
+    @Schema(name = "updatedTime", description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedTime;
+    @Schema(name = "deleted", description = "逻辑删除：0 未删除；1 已删除", defaultValue = "0")
     @TableField(value = "is_deleted", fill = FieldFill.INSERT)
     private boolean deleted;
 

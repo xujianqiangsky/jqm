@@ -16,6 +16,8 @@ package plus.jqm.api.domain.vo;
  * limitations under the License.
  */
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -27,23 +29,38 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Schema(description = "菜单展示对象")
 public class SysMenuVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "菜单 id")
     private Long id;
+    @Schema(name = "name", description = "菜单名称")
     private String name;
+    @Schema(name = "enName", description = "菜单英文名称")
     private String enName;
+    @Schema(name = "parentId", description = "菜单所属父级 id")
     private Long parentId;
+    @Schema(name = "permission", description = "权限")
     private String permission;
+    @Schema(name = "path", description = "路径")
     private String path;
+    @Schema(name = "icon", description = "菜单图标")
     private String icon;
+    @Schema(name = "sortOrder", description = "排序", defaultValue = "0")
     private Integer sortOrder;
+    @Schema(name = "type", description = "菜单类型：0 目录；1 菜单；2 按钮", defaultValue = "0")
     private Integer type;
+    @Schema(name = "hidden", description = "菜单是否隐藏：0 未隐藏；1 已隐藏", defaultValue = "0")
     private boolean hidden;
+    @Schema(name = "createdBy", description = "创建人")
     private String createdBy;
+    @Schema(name = "createdTime", description = "创建时间")
     private LocalDateTime createdTime;
+    @Schema(name = "updatedBy", description = "更新人")
     private String updatedBy;
+    @Schema(name = "updatedTime", description = "更新时间")
     private LocalDateTime updatedTime;
 
     public Long getId() {

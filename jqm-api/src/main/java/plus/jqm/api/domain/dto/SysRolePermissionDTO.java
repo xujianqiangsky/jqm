@@ -16,6 +16,8 @@ package plus.jqm.api.domain.dto;
  * limitations under the License.
  */
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
@@ -27,11 +29,14 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/11
  */
+@Schema(description = "角色权限传输对象")
 public class SysRolePermissionDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "name", description = "角色名称")
     private String name;
+    @Schema(name = "permissionList", description = "权限集合")
     private List<String> permissionList;
 
     public String getName() {

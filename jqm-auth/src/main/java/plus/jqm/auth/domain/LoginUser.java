@@ -16,6 +16,8 @@ package plus.jqm.auth.domain;
  * limitations under the License.
  */
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,11 +28,14 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/08
  */
+@Schema(description = "用户登录信息")
 public class LoginUser implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "username", description = "用户名")
     private String username;
+    @Schema(name = "password", description = "用户密码")
     private String password;
 
     public String getUsername() {

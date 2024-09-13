@@ -10,4 +10,12 @@
     </parent>
 
     <artifactId>jqm-common-core</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

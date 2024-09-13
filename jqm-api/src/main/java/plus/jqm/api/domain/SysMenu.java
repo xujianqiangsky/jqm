@@ -18,6 +18,7 @@ package plus.jqm.api.domain;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -30,26 +31,44 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Schema(description = "菜单数据对象")
 public class SysMenu implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "菜单 id")
     private Long id;
+    @Schema(name = "name", description = "菜单名称")
     private String name;
+    @Schema(name = "enName", description = "菜单英文名称")
     private String enName;
+    @Schema(name = "parentId", description = "菜单所属父级 id")
     private Long parentId;
+    @Schema(name = "permission", description = "权限")
     private String permission;
+    @Schema(name = "path", description = "路径")
     private String path;
+    @Schema(name = "icon", description = "菜单图标")
     private String icon;
+    @Schema(name = "sortOrder", description = "排序", defaultValue = "0")
     private Integer sortOrder;
+    @Schema(name = "type", description = "菜单类型：0 目录；1 菜单；2 按钮", defaultValue = "0")
     private Integer type;
+    @Schema(name = "hidden", description = "菜单是否隐藏：0 未隐藏；1 已隐藏", defaultValue = "0")
     private boolean hidden;
+    @Schema(name = "createdBy", description = "创建人")
+    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
+    @Schema(name = "createdTime", description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
+    @Schema(name = "updatedBy", description = "更新人")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
+    @Schema(name = "updatedTime", description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedTime;
+    @Schema(name = "deleted", description = "逻辑删除：0 未删除；1 已删除", defaultValue = "0")
     @TableField(value = "is_deleted", fill = FieldFill.INSERT)
     private boolean deleted;
 

@@ -18,6 +18,7 @@ package plus.jqm.api.domain;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -30,27 +31,46 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Schema(description = "用户数据对象")
 public class SysUser implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "用户 id")
     private Long id;
+    @Schema(name = "username", description = "用户名")
     private String username;
+    @Schema(name = "name", description = "姓名")
     private String name;
+    @Schema(name = "password", description = "用户密码")
     private String password;
+    @Schema(name = "salt", description = "盐值")
     private String salt;
+    @Schema(name = "deptId", description = "部门 id")
     private Long deptId;
+    @Schema(name = "gender", description = "性别：0 男；1 女；2 未知", defaultValue = "0")
     private Integer gender;
+    @Schema(name = "mobileNumber", description = "手机号码")
     private String mobileNumber;
+    @Schema(name = "avatar", description = "用户头像")
     private String avatar;
+    @Schema(name = "email", description = "用户邮箱")
     private String email;
+    @Schema(name = "status", description = "账号状态：0 正常；1 锁定", defaultValue = "0")
     private Integer status;
+    @Schema(name = "createdBy", description = "创建人")
+    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
+    @Schema(name = "createdTime", description = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
+    @Schema(name = "updatedBy", description = "更新人")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
+    @Schema(name = "updatedTime", description = "更新时间")
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedTime;
+    @Schema(name = "deleted", description = "逻辑删除：0 未删除；1 已删除", defaultValue = "0")
     @TableField(value = "is_deleted", fill = FieldFill.INSERT)
     private boolean deleted;
 

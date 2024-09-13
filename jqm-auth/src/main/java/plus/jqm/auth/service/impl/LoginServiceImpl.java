@@ -35,7 +35,7 @@ import plus.jqm.auth.domain.vo.TokenInfoVO;
 import plus.jqm.auth.service.LoginService;
 import plus.jqm.common.core.constant.TokenExtraConstants;
 import plus.jqm.common.core.domain.Result;
-import plus.jqm.common.security.constant.AuthErrorCode;
+import plus.jqm.common.security.constant.code.AuthErrorCode;
 
 /**
  * 用户登录服务实现

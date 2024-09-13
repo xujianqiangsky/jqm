@@ -39,7 +39,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import plus.jqm.common.core.constant.code.CommonErrorCode;
 import plus.jqm.common.core.domain.Result;
-import plus.jqm.common.security.constant.AuthErrorCode;
+import plus.jqm.common.security.constant.code.AuthErrorCode;
 import plus.jqm.common.security.support.StpInterfaceImpl;
 
 /**
@@ -58,6 +58,7 @@ public class JQMSaTokenAutoConfiguration implements WebMvcConfigurer {
         return new SaServletFilter()
                 // 拦截地址
                 .addInclude("/**")
+                .addExclude("/v3/api-docs/**")
                 .setAuth(obj -> {
                     // 登录校验
                     SaRouter.match("/**", "/auth/login", r -> StpUtil.checkLogin());

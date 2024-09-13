@@ -16,6 +16,8 @@ package plus.jqm.api.domain.vo;
  * limitations under the License.
  */
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -27,16 +29,24 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Schema(description = "角色展示对象")
 public class SysRoleVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "角色 id")
     private Long id;
+    @Schema(name = "name", description = "角色名称")
     private String name;
+    @Schema(name = "description", description = "角色描述")
     private String description;
+    @Schema(name = "createdBy", description = "创建人")
     private String createdBy;
+    @Schema(name = "createdTime", description = "创建时间")
     private LocalDateTime createdTime;
+    @Schema(name = "updatedBy", description = "更新人")
     private String updatedBy;
+    @Schema(name = "updatedTime", description = "更新时间")
     private LocalDateTime updatedTime;
 
     public Long getId() {

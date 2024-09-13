@@ -16,6 +16,10 @@ package plus.jqm.api.domain;
  * limitations under the License.
  */
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -28,17 +32,30 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/10
  */
+@Schema(description = "角色权限数据对象")
 public class SysRolePermission implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "角色 id")
     private Long id;
+    @Schema(name = "name", description = "角色名称")
     private String name;
+    @Schema(name = "description", description = "角色描述")
     private String description;
+    @Schema(name = "permissionList", description = "权限集合")
     private List<String> permissionList;
+    @Schema(name = "createdBy", description = "创建人")
+    @TableField(fill = FieldFill.INSERT)
     private String createdBy;
+    @Schema(name = "createdTime", description = "创建时间")
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createdTime;
+    @Schema(name = "updatedBy", description = "更新人")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updatedBy;
+    @Schema(name = "updatedTime", description = "更新时间")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedTime;
 
     public Long getId() {

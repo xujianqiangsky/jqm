@@ -1,4 +1,4 @@
-package plus.jqm.common.security.constant;
+package plus.jqm.admin.constant.code;
 
 /*
  * Copyright 2024 the original author or authors.
@@ -19,22 +19,20 @@ package plus.jqm.common.security.constant;
 import plus.jqm.common.core.constant.code.ErrorCode;
 
 /**
- * 身份认证错误码
+ * 用户错误码
  *
  * @author xujianqiang
- * @date 2024/09/09
+ * @date 2024/09/12
  */
-public enum AuthErrorCode implements ErrorCode {
-    NOT_LOGIN("A0201", "用户未登录"),
-    USERNAME_OR_PASSWORD_ERROR("A0202", "用户名或密码错误"),
-    ACCESS_UNAUTHORIZED("A0301", "访问未授权"),
-    INVALID_SAME_TOKEN("A0302", "无效的 Same-Token"),
+public enum UserErrorCode implements ErrorCode {
+    MOBILE_NUMBER_ALREADY_EXISTS("A0203", "手机号码已存在"),
+    USERNAME_ALREADY_EXISTS("A0204", "用户名已存在"),
     ;
 
     private final String code;
     private final String msg;
 
-    AuthErrorCode(String code, String msg) {
+    UserErrorCode(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }

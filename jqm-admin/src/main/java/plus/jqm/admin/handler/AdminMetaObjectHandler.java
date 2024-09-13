@@ -1,4 +1,4 @@
-package plus.jqm.common.mybatis.handler;
+package plus.jqm.admin.handler;
 
 /*
  * Copyright 2024 the original author or authors.
@@ -20,17 +20,20 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import plus.jqm.common.security.util.SecurityUtils;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * 字段填充处理器
  *
  * @author xujianqiang
- * @date 2024/09/05
+ * @date 2024/09/12
  */
-public class JQMMetaObjectHandler implements MetaObjectHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(JQMMetaObjectHandler.class);
+public class AdminMetaObjectHandler implements MetaObjectHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(AdminMetaObjectHandler.class);
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -39,7 +42,9 @@ public class JQMMetaObjectHandler implements MetaObjectHandler {
         }
 
         LocalDateTime now = LocalDateTime.now();
+        this.strictInsertFill(metaObject, "createdBy", String.class, SecurityUtils.getLoginUsername());
         this.strictInsertFill(metaObject, "createdTime", LocalDateTime.class, now);
+        this.strictInsertFill(metaObject, "updatedBy", String.class, SecurityUtils.getLoginUsername());
         this.strictInsertFill(metaObject, "updatedTime", LocalDateTime.class, now);
         this.strictInsertFill(metaObject, "deleted", boolean.class, false);
     }
@@ -49,6 +54,16 @@ public class JQMMetaObjectHandler implements MetaObjectHandler {
         if (LOG.isDebugEnabled()) {
             LOG.debug("update fill start");
         }
+        this.strictUpdateFill(metaObject, "updatedBy", String.class, SecurityUtils.getLoginUsername());
         this.strictUpdateFill(metaObject, "updatedTime", LocalDateTime.class, LocalDateTime.now());
+    }
+
+    @Override
+    public MetaObjectHandler strictFillStrategy(MetaObject metaObject, String fieldName, Supplier<?> fieldVal) {
+        Object obj = fieldVal.get();
+        if (Objects.nonNull(obj)) {
+            metaObject.setValue(fieldName, obj);
+        }
+        return this;
     }
 }

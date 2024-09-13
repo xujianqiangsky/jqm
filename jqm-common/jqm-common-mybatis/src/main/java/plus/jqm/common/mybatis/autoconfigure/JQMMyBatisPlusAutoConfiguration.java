@@ -21,7 +21,6 @@ import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Bean;
-import plus.jqm.common.mybatis.handler.JQMMetaObjectHandler;
 
 /**
  * Mybatis Plus 自定义配置
@@ -31,11 +30,6 @@ import plus.jqm.common.mybatis.handler.JQMMetaObjectHandler;
  */
 @AutoConfiguration
 public class JQMMyBatisPlusAutoConfiguration {
-    @Bean
-    public JQMMetaObjectHandler jqmMetaObjectHandler() {
-        return new JQMMetaObjectHandler();
-    }
-
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();

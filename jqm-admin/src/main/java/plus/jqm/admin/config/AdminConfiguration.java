@@ -1,4 +1,4 @@
-package plus.jqm.admin.service;
+package plus.jqm.admin.config;
 
 /*
  * Copyright 2024 the original author or authors.
@@ -16,28 +16,20 @@ package plus.jqm.admin.service;
  * limitations under the License.
  */
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import plus.jqm.api.domain.SysUser;
-import plus.jqm.api.domain.dto.SysUserDTO;
-import plus.jqm.api.domain.vo.SysUserDetailVO;
-import plus.jqm.api.domain.vo.SysUserVO;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import plus.jqm.admin.handler.AdminMetaObjectHandler;
 
 /**
- * 用户业务逻辑接口
+ * admin 配置类
  *
  * @author xujianqiang
- * @date 2024/09/05
+ * @date 2024/09/12
  */
-public interface SysUserService extends IService<SysUser> {
-    SysUserVO getUserById(Long id);
-
-    SysUserDetailVO getUserDetailById(Long id);
-
-    void saveUser(SysUserDTO userDTO);
-
-    void updateUser(SysUserDTO userDTO);
-
-    void updateLoginPassword(SysUserDTO userDTO);
-
-    void updateLoginUserMobileNumber(SysUserDTO userDTO);
+@Configuration(proxyBeanMethods = false)
+public class AdminConfiguration {
+    @Bean
+    public AdminMetaObjectHandler adminMetaObjectHandler() {
+        return new AdminMetaObjectHandler();
+    }
 }

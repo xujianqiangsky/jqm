@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import plus.jqm.common.core.constant.code.CommonErrorCode;
 import plus.jqm.common.core.domain.Result;
-import plus.jqm.common.security.constant.AuthErrorCode;
+import plus.jqm.common.security.constant.code.AuthErrorCode;
 import plus.jqm.common.security.util.SecurityUtils;
 
 /**

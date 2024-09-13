@@ -16,6 +16,8 @@ package plus.jqm.auth.domain.vo;
  * limitations under the License.
  */
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
@@ -26,11 +28,14 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/08
  */
+@Schema(description = "token 信息")
 public class TokenInfoVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "tokenValue", description = "令牌")
     private String tokenValue;
+    @Schema(name = "loginDevice", description = "登录设备标识")
     private String loginDevice;
 
     public String getTokenValue() {

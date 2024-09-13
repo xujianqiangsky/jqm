@@ -16,6 +16,7 @@ package plus.jqm.common.core.domain;
  * limitations under the License.
  */
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import plus.jqm.common.core.constant.code.CommonErrorCode;
 import plus.jqm.common.core.constant.code.ErrorCode;
 
@@ -29,12 +30,16 @@ import java.util.Objects;
  * @author xujianqiang
  * @date 2024/09/05
  */
+@Schema(description = "响应结果")
 public final class Result<T> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "code", description = "响应码")
     private String code;
+    @Schema(name = "msg", description = "响应消息")
     private String msg;
+    @Schema(name = "data", description = "响应数据")
     private T data;
 
     private Result() {}

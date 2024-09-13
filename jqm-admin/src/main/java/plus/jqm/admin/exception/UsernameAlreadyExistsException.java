@@ -1,4 +1,4 @@
-package plus.jqm.admin.service;
+package plus.jqm.admin.exception;
 
 /*
  * Copyright 2024 the original author or authors.
@@ -16,28 +16,22 @@ package plus.jqm.admin.service;
  * limitations under the License.
  */
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import plus.jqm.api.domain.SysUser;
-import plus.jqm.api.domain.dto.SysUserDTO;
-import plus.jqm.api.domain.vo.SysUserDetailVO;
-import plus.jqm.api.domain.vo.SysUserVO;
-
 /**
- * 用户业务逻辑接口
+ * 用户名已存在异常
  *
  * @author xujianqiang
- * @date 2024/09/05
+ * @date 2024/09/12
  */
-public interface SysUserService extends IService<SysUser> {
-    SysUserVO getUserById(Long id);
+public class UsernameAlreadyExistsException extends RuntimeException{
+    public UsernameAlreadyExistsException() {
+        super();
+    }
 
-    SysUserDetailVO getUserDetailById(Long id);
+    public UsernameAlreadyExistsException(String message) {
+        super(message);
+    }
 
-    void saveUser(SysUserDTO userDTO);
-
-    void updateUser(SysUserDTO userDTO);
-
-    void updateLoginPassword(SysUserDTO userDTO);
-
-    void updateLoginUserMobileNumber(SysUserDTO userDTO);
+    public UsernameAlreadyExistsException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
