@@ -17,8 +17,7 @@ package plus.jqm.common.security.autoconfigure;
  */
 
 import cn.dev33.satoken.context.SaHolder;
-import cn.dev33.satoken.exception.NotLoginException;
-import cn.dev33.satoken.exception.SameTokenInvalidException;
+import cn.dev33.satoken.context.model.SaResponse;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
@@ -26,20 +25,22 @@ import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.same.SaSameUtil;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import plus.jqm.common.core.constant.code.CommonErrorCode;
-import plus.jqm.common.core.domain.Result;
-import plus.jqm.common.security.constant.code.AuthErrorCode;
+import plus.jqm.common.security.handler.*;
+import plus.jqm.common.security.handler.impl.NotLoginExceptionHandler;
+import plus.jqm.common.security.handler.impl.SaTokenExceptionHandler;
+import plus.jqm.common.security.handler.impl.SameTokenInvalidExceptionHandler;
 import plus.jqm.common.security.support.StpInterfaceImpl;
 
 /**
@@ -54,7 +55,25 @@ public class JQMSaTokenAutoConfiguration implements WebMvcConfigurer {
     private static final Logger LOG = LoggerFactory.getLogger(JQMSaTokenAutoConfiguration.class);
 
     @Bean
-    public SaServletFilter getSaServletFilter(ObjectMapper objectMapper) {
+    public SaTokenSecurityExceptionHandler jqmSaTokenExceptionHandler(ObjectProvider<SecurityExceptionHandlerCustomizer> exceptionHandlerCustomizers, ObjectMapper objectMapper) {
+        SecurityExceptionHandlerBuilder builder = new SecurityExceptionHandlerBuilder();
+        builder.setObjectMapper(objectMapper);
+        exceptionHandlerCustomizers.orderedStream().forEach(customizer -> customizer.customize(builder));
+        return builder.build();
+    }
+
+    @Order
+    @Bean
+    public SecurityExceptionHandlerCustomizer jqmSaTokenExceptionHandlerCustomizer() {
+        return customizer -> {
+            customizer.addExceptionHandler(new NotLoginExceptionHandler());
+            customizer.addExceptionHandler(new SameTokenInvalidExceptionHandler());
+            customizer.addExceptionHandler(new SaTokenExceptionHandler());
+        };
+    }
+
+    @Bean
+    public SaServletFilter getSaServletFilter(SaTokenSecurityExceptionHandler exceptionHandler) {
         return new SaServletFilter()
                 // 拦截地址
                 .addInclude("/**")
@@ -66,19 +85,9 @@ public class JQMSaTokenAutoConfiguration implements WebMvcConfigurer {
                     SaSameUtil.checkCurrentRequestToken();
                 })
                 .setError(error -> {
-                    SaHolder.getResponse().setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
-                    try {
-                        if (error instanceof NotLoginException exception) {
-                            return objectMapper.writeValueAsString(Result.failure(AuthErrorCode.NOT_LOGIN));
-                        }
-                        if (error instanceof SameTokenInvalidException exception) {
-                            LOG.error("msg: {}", exception.getMessage(), exception);
-                            return objectMapper.writeValueAsString(Result.failure(AuthErrorCode.INVALID_SAME_TOKEN));
-                        }
-                        return objectMapper.writeValueAsString(Result.failure(CommonErrorCode.SYSTEM_EXECUTION_ERROR));
-                    } catch (JsonProcessingException ignored) {}
-                    LOG.error("msg: {}", error.getMessage(), error);
-                    return Result.failure(CommonErrorCode.SYSTEM_EXECUTION_ERROR);
+                    SaResponse response = SaHolder.getResponse();
+                    response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_UTF8_VALUE);
+                    return exceptionHandler.handle(response, error);
                 })
                 .setBeforeAuth(r -> {
                     SaHolder.getResponse()
