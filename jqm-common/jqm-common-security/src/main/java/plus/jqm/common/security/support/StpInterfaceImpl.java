@@ -61,15 +61,15 @@ public class StpInterfaceImpl implements StpInterface {
             // 从数据库中获取用户权限信息
             Long id = Long.valueOf(String.valueOf(loginId));
             Result<List<SysRolePermissionDTO>> result = sysUserRemoteService.getUserRoleAndPermissionById(id);
-            List<SysRolePermissionDTO> sysRolePermissionDTOList = result.getData();
-            roleList = new ArrayList<>(sysRolePermissionDTOList.size());
-            for (SysRolePermissionDTO sysRolePermissionDTO : sysRolePermissionDTOList) {
-                roleList.add(sysRolePermissionDTO.getName());
+            List<SysRolePermissionDTO> rolePermissionDTOList = result.getData();
+            roleList = new ArrayList<>(rolePermissionDTOList.size());
+            for (SysRolePermissionDTO rolePermissionDTO : rolePermissionDTOList) {
+                roleList.add(rolePermissionDTO.getName());
             }
             // 放入缓存
             SaManager.getSaTokenDao()
                     .setObject(CacheConstants.ROLE_CACHE_KEY_PREFIX.getKey() + loginId, roleList, StpUtil.getTokenTimeout());
-            for (SysRolePermissionDTO sysRolePermissionDTO : sysRolePermissionDTOList) {
+            for (SysRolePermissionDTO sysRolePermissionDTO : rolePermissionDTOList) {
                 SaManager.getSaTokenDao()
                         .setObject(CacheConstants.PERMISSION_CACHE_KEY_PREFIX.getKey() + sysRolePermissionDTO.getName(), sysRolePermissionDTO.getPermissionList(), StpUtil.getTokenTimeout());
             }

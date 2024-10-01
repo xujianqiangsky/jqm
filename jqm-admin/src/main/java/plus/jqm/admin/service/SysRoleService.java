@@ -18,29 +18,22 @@ package plus.jqm.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import plus.jqm.api.domain.SysUser;
-import plus.jqm.api.domain.dto.SysUserDTO;
-import plus.jqm.api.domain.vo.SysUserDetailVO;
-import plus.jqm.api.domain.vo.SysUserVO;
+import plus.jqm.api.domain.SysRole;
+import plus.jqm.api.domain.dto.SysRoleDTO;
+import plus.jqm.api.domain.vo.SysRoleVO;
 
 /**
- * 用户业务逻辑接口
+ * 角色业务逻辑接口
  *
  * @author xujianqiang
- * @date 2024/09/05
+ * @date 2024/09/24
  */
-public interface SysUserService extends IService<SysUser> {
-    SysUserVO getUserById(Long id);
+public interface SysRoleService extends IService<SysRole> {
+    SysRoleVO getRoleById(Long id);
 
-    SysUserDetailVO getUserDetailById(Long id);
+    void saveRole(SysRoleDTO roleDTO);
 
-    void saveUser(SysUserDTO userDTO);
+    void updateRoleById(SysRoleDTO roleDTO);
 
-    void updateUserById(SysUserDTO userDTO);
-
-    void updateLoginPassword(SysUserDTO userDTO);
-
-    void updateLoginUserMobileNumber(SysUserDTO userDTO);
-
-    IPage<SysUserVO> listUsers(long pageNum, long pageSize);
+    IPage<SysRoleVO> listRoles(long pageNum, long pageSize);
 }

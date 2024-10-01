@@ -19,6 +19,8 @@ package plus.jqm.admin.service.impl;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -27,10 +29,7 @@ import plus.jqm.admin.exception.MobileNumberAlreadyExistsException;
 import plus.jqm.admin.exception.UsernameAlreadyExistsException;
 import plus.jqm.admin.mapper.SysUserMapper;
 import plus.jqm.admin.service.SysUserService;
-import plus.jqm.api.domain.SysMenu;
-import plus.jqm.api.domain.SysRole;
-import plus.jqm.api.domain.SysUser;
-import plus.jqm.api.domain.SysUserDetail;
+import plus.jqm.api.domain.*;
 import plus.jqm.api.domain.dto.SysUserDTO;
 import plus.jqm.api.domain.vo.*;
 
@@ -53,6 +52,22 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    public IPage<SysUserVO> listUsers(long pageNum, long pageSize) {
+        IPage<SysUser> userPage = new Page<>(pageNum, pageSize);
+        page(userPage);
+        IPage<SysUserVO> userVOPage = new Page<>();
+        BeanUtils.copyProperties(userPage, userVOPage, "records");
+        List<SysUserVO> userVOList = new ArrayList<>();
+        for (SysUser user : userPage.getRecords()) {
+            SysUserVO userVO = new SysUserVO();
+            BeanUtils.copyProperties(user, userVO);
+            userVOList.add(userVO);
+        }
+        userVOPage.setRecords(userVOList);
+        return userVOPage;
+    }
+
+    @Override
     public SysUserVO getUserById(Long id) {
         SysUserVO userVO = new SysUserVO();
         SysUser user = getById(id);
@@ -70,7 +85,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (userDetail != null) {
             // 数据拷贝
             BeanUtils.copyProperties(userDetail, userDetailVO);
-            BeanUtils.copyProperties(userDetail.getDept(), deptVO);
+            SysDept dept = userDetail.getDept();
+            if (dept != null) {
+                BeanUtils.copyProperties(dept, deptVO);
+            }
             List<SysRole> roleList = userDetail.getRoleList();
             List<SysMenu> menuList = userDetail.getMenuList();
             ArrayList<SysRoleVO> roleVOList = new ArrayList<>(roleList.size());
@@ -106,7 +124,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void updateUser(SysUserDTO userDTO) {
+    public void updateUserById(SysUserDTO userDTO) {
         SysUser user = getById(userDTO.getId());
         if (user != null) {
             user.setName(userDTO.getName());

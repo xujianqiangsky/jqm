@@ -27,6 +27,9 @@ import plus.jqm.common.core.constant.code.ErrorCode;
 public enum UserErrorCode implements ErrorCode {
     MOBILE_NUMBER_ALREADY_EXISTS("A0203", "手机号码已存在"),
     USERNAME_ALREADY_EXISTS("A0204", "用户名已存在"),
+    MENU_NAME_ALREADY_EXISTS("A205", "菜单名称已存在"),
+    DEPT_NAME_ALREADY_EXISTS("A206", "部门名称已存在"),
+    ROLE_NAME_ALREADY_EXISTS("A207", "角色名称已存在"),
     ;
 
     private final String code;

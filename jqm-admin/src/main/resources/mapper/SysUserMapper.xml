@@ -66,7 +66,7 @@
             <result property="icon" column="icon"/>
             <result property="sortOrder" column="sort_order"/>
             <result property="type" column="type"/>
-            <result property="hidden" column="hidden"/>
+            <result property="hidden" column="is_hidden"/>
             <result property="createdBy" column="created_by"/>
             <result property="createdTime" column="created_time"/>
             <result property="updatedBy" column="updated_by"/>

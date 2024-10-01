@@ -16,8 +16,9 @@ package plus.jqm.admin.controller;
  * limitations under the License.
  */
 
-import cn.dev33.satoken.annotation.SaCheckRole;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,8 +46,17 @@ public class SysUserController {
         this.userService = userService;
     }
 
+    @Operation(summary = "分页查询用户信息")
+    @SaCheckPermission("sys:user:view")
+    @GetMapping("/list/{pageNum}/{pageSize}")
+    public Result<IPage<SysUserVO>> listUsers(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
+                                                    @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+        IPage<SysUserVO> page = userService.listUsers(pageNum, pageSize);
+        return Result.success(page);
+    }
+
     @Operation(summary = "获取登录用户信息")
-    @GetMapping("/info")
+    @GetMapping
     public Result<SysUserVO> getLoginUserInfo() {
         SysUserVO userVO = userService.getUserById(StpUtil.getLoginIdAsLong());
         return Result.success(userVO);
@@ -60,7 +70,7 @@ public class SysUserController {
     }
 
     @Operation(summary = "保存用户信息")
-    @SaCheckRole("administrator")
+    @SaCheckPermission("sys:user:add")
     @PostMapping
     public Result<String> saveUser(@RequestBody SysUserDTO userDTO) {
         userService.saveUser(userDTO);
@@ -71,7 +81,7 @@ public class SysUserController {
     @PutMapping
     public Result<String> updateLoginUser(@RequestBody SysUserDTO userDTO) {
         userDTO.setId(StpUtil.getLoginIdAsLong());
-        userService.updateUser(userDTO);
+        userService.updateUserById(userDTO);
         return Result.success("ok");
     }
 
@@ -82,26 +92,26 @@ public class SysUserController {
         return Result.success("ok");
     }
 
-    @Operation(summary = "修改用户手机号码")
+    @Operation(summary = "修改登录用户手机号码")
     @PutMapping("/mobile")
     public Result<String> updateLoginUserMobileNumber(@RequestBody SysUserDTO userDTO) {
         userService.updateLoginUserMobileNumber(userDTO);
         return Result.success("ok");
     }
 
-    @Operation(summary = "获取指定用户信息")
-    @SaCheckRole("administrator")
-    @GetMapping("/info/{id}")
-    public Result<SysUserVO> getLoginUserInfo(@Parameter(name = "id", description = "用户 id") @PathVariable("id") Long id) {
+    @Operation(summary = "根据 id 获取指定用户信息")
+    @SaCheckPermission("sys:user:view")
+    @GetMapping("/{id}")
+    public Result<SysUserVO> getUserInfoById(@Parameter(name = "id", description = "用户 id") @PathVariable("id") Long id) {
         SysUserVO userVO = userService.getUserById(id);
         return Result.success(userVO);
     }
 
-    @Operation(summary = "修改指定用户信息")
-    @SaCheckRole("administrator")
+    @Operation(summary = "根据 id 修改指定用户信息")
+    @SaCheckPermission("sys:user:edit")
     @PutMapping("/change")
-    public Result<String> updateUser(@RequestBody SysUserDTO userDTO) {
-        userService.updateUser(userDTO);
+    public Result<String> updateUserById(@RequestBody SysUserDTO userDTO) {
+        userService.updateUserById(userDTO);
         return Result.success("ok");
     }
 }

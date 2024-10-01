@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import plus.jqm.admin.constant.code.UserErrorCode;
-import plus.jqm.admin.exception.MobileNumberAlreadyExistsException;
+import plus.jqm.admin.exception.*;
 import plus.jqm.common.core.constant.code.CommonErrorCode;
 import plus.jqm.common.core.domain.Result;
 import plus.jqm.common.security.constant.code.AuthErrorCode;
@@ -42,7 +42,31 @@ import plus.jqm.common.security.util.SecurityUtils;
 public class AdminExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(AdminExceptionHandler.class);
 
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = RoleNameAlreadyExistsException.class)
+    public Result<Object> handleDRoleNameAlreadyExists(RoleNameAlreadyExistsException exception) {
+        return Result.failure(UserErrorCode.ROLE_NAME_ALREADY_EXISTS);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = DeptNameAlreadyExistsException.class)
+    public Result<Object> handleDeptNameAlreadyExists(DeptNameAlreadyExistsException exception) {
+        return Result.failure(UserErrorCode.DEPT_NAME_ALREADY_EXISTS);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = MenuNameAlreadyExistsException.class)
+    public Result<Object> handleMenuNameAlreadyExists(MenuNameAlreadyExistsException exception) {
+        return Result.failure(UserErrorCode.MENU_NAME_ALREADY_EXISTS);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = UsernameAlreadyExistsException.class)
+    public Result<Object> handleUsernameAlreadyExists(UsernameAlreadyExistsException exception) {
+        return Result.failure(UserErrorCode.USERNAME_ALREADY_EXISTS);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = MobileNumberAlreadyExistsException.class)
     public Result<Object> handleMobileNumberAlreadyExists(MobileNumberAlreadyExistsException exception) {
         return Result.failure(UserErrorCode.MOBILE_NUMBER_ALREADY_EXISTS);

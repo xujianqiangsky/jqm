@@ -18,29 +18,22 @@ package plus.jqm.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import plus.jqm.api.domain.SysUser;
-import plus.jqm.api.domain.dto.SysUserDTO;
-import plus.jqm.api.domain.vo.SysUserDetailVO;
-import plus.jqm.api.domain.vo.SysUserVO;
+import plus.jqm.api.domain.SysMenu;
+import plus.jqm.api.domain.dto.SysMenuDTO;
+import plus.jqm.api.domain.vo.SysMenuVO;
 
 /**
- * 用户业务逻辑接口
+ * 菜单业务逻辑接口
  *
  * @author xujianqiang
- * @date 2024/09/05
+ * @date 2024/09/24
  */
-public interface SysUserService extends IService<SysUser> {
-    SysUserVO getUserById(Long id);
+public interface SysMenuService extends IService<SysMenu> {
+    SysMenuVO getMenuById(Long id);
 
-    SysUserDetailVO getUserDetailById(Long id);
+    void saveMenu(SysMenuDTO menuDTO);
 
-    void saveUser(SysUserDTO userDTO);
+    void updateMenuById(SysMenuDTO menuDTO);
 
-    void updateUserById(SysUserDTO userDTO);
-
-    void updateLoginPassword(SysUserDTO userDTO);
-
-    void updateLoginUserMobileNumber(SysUserDTO userDTO);
-
-    IPage<SysUserVO> listUsers(long pageNum, long pageSize);
+    IPage<SysMenuVO> listMenus(long pageNum, long pageSize);
 }

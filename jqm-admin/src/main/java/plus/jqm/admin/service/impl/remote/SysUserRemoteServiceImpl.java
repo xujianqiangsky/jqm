@@ -38,7 +38,7 @@ import java.util.List;
  */
 @DubboService
 public class SysUserRemoteServiceImpl implements SysUserRemoteService {
-    private SysUserMapper userMapper;
+    private final SysUserMapper userMapper;
 
     public SysUserRemoteServiceImpl(SysUserMapper userMapper) {
         this.userMapper = userMapper;

@@ -16,31 +16,18 @@ package plus.jqm.admin.service;
  * limitations under the License.
  */
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import plus.jqm.api.domain.SysUser;
-import plus.jqm.api.domain.dto.SysUserDTO;
-import plus.jqm.api.domain.vo.SysUserDetailVO;
-import plus.jqm.api.domain.vo.SysUserVO;
+import plus.jqm.api.domain.SysUserRole;
+import plus.jqm.api.domain.dto.SysUserRoleDTO;
+
+import java.util.List;
 
 /**
- * 用户业务逻辑接口
+ * 用户角色业务逻辑接口
  *
  * @author xujianqiang
- * @date 2024/09/05
+ * @date 2024/09/27
  */
-public interface SysUserService extends IService<SysUser> {
-    SysUserVO getUserById(Long id);
-
-    SysUserDetailVO getUserDetailById(Long id);
-
-    void saveUser(SysUserDTO userDTO);
-
-    void updateUserById(SysUserDTO userDTO);
-
-    void updateLoginPassword(SysUserDTO userDTO);
-
-    void updateLoginUserMobileNumber(SysUserDTO userDTO);
-
-    IPage<SysUserVO> listUsers(long pageNum, long pageSize);
+public interface SysUserRoleService extends IService<SysUserRole> {
+    void saveUserRole(List<SysUserRoleDTO> userRoleDTOList);
 }
