@@ -36,10 +36,18 @@ public class SysRoleMenu implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "角色菜单 id")
+    private Long id;
     @Schema(name = "roleId", description = "角色 id")
     private Long roleId;
+    @Schema(name = "roleName", description = "角色名称")
+    @TableField(exist = false)
+    private String roleName;
     @Schema(name = "menuId", description = "菜单 id")
     private Long menuId;
+    @Schema(name = "permission", description = "权限")
+    @TableField(exist = false)
+    private String permission;
     @Schema(name = "createdBy", description = "创建人")
     @TableField(fill = FieldFill.INSERT)
     private String createdBy;
@@ -53,6 +61,14 @@ public class SysRoleMenu implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedTime;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getRoleId() {
         return roleId;
     }
@@ -61,12 +77,28 @@ public class SysRoleMenu implements Serializable {
         this.roleId = roleId;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     public Long getMenuId() {
         return menuId;
     }
 
     public void setMenuId(Long menuId) {
         this.menuId = menuId;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
     }
 
     public String getCreatedBy() {
@@ -104,20 +136,23 @@ public class SysRoleMenu implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SysRoleMenu that)) return false;
-        return Objects.equals(roleId, that.roleId) && Objects.equals(menuId, that.menuId) && Objects.equals(createdBy, that.createdBy) && Objects.equals(createdTime, that.createdTime) && Objects.equals(updatedBy, that.updatedBy) && Objects.equals(updatedTime, that.updatedTime);
+        if (!(o instanceof SysRoleMenu roleMenu)) return false;
+        return Objects.equals(id, roleMenu.id) && Objects.equals(roleId, roleMenu.roleId) && Objects.equals(roleName, roleMenu.roleName) && Objects.equals(menuId, roleMenu.menuId) && Objects.equals(permission, roleMenu.permission) && Objects.equals(createdBy, roleMenu.createdBy) && Objects.equals(createdTime, roleMenu.createdTime) && Objects.equals(updatedBy, roleMenu.updatedBy) && Objects.equals(updatedTime, roleMenu.updatedTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleId, menuId, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, roleId, roleName, menuId, permission, createdBy, createdTime, updatedBy, updatedTime);
     }
 
     @Override
     public String toString() {
         return "SysRoleMenu{" +
-                "roleId=" + roleId +
+                "id=" + id +
+                ", roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
                 ", menuId=" + menuId +
+                ", permission='" + permission + '\'' +
                 ", createdBy='" + createdBy + '\'' +
                 ", createdTime=" + createdTime +
                 ", updatedBy='" + updatedBy + '\'' +

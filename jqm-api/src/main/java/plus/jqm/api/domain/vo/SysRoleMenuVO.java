@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * 角色菜单展示对象
@@ -33,14 +34,16 @@ public class SysRoleMenuVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "角色菜单 id")
+    private Long id;
     @Schema(name = "roleId", description = "角色 id")
     private Long roleId;
-    @Schema(name = "name", description = "角色名称")
+    @Schema(name = "roleName", description = "角色名称")
     private String roleName;
     @Schema(name = "menuId", description = "菜单 id")
     private Long menuId;
-    @Schema(name = "name", description = "菜单名称")
-    private String menuName;
+    @Schema(name = "permission", description = "权限")
+    private String permission;
     @Schema(name = "createdBy", description = "创建人")
     private String createdBy;
     @Schema(name = "createdTime", description = "创建时间")
@@ -49,4 +52,103 @@ public class SysRoleMenuVO implements Serializable {
     private String updatedBy;
     @Schema(name = "updatedTime", description = "更新时间")
     private LocalDateTime updatedTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public Long getMenuId() {
+        return menuId;
+    }
+
+    public void setMenuId(Long menuId) {
+        this.menuId = menuId;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDateTime getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public LocalDateTime getUpdatedTime() {
+        return updatedTime;
+    }
+
+    public void setUpdatedTime(LocalDateTime updatedTime) {
+        this.updatedTime = updatedTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SysRoleMenuVO that)) return false;
+        return Objects.equals(id, that.id) && Objects.equals(roleId, that.roleId) && Objects.equals(roleName, that.roleName) && Objects.equals(menuId, that.menuId) && Objects.equals(permission, that.permission) && Objects.equals(createdBy, that.createdBy) && Objects.equals(createdTime, that.createdTime) && Objects.equals(updatedBy, that.updatedBy) && Objects.equals(updatedTime, that.updatedTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleId, roleName, menuId, permission, createdBy, createdTime, updatedBy, updatedTime);
+    }
+
+    @Override
+    public String toString() {
+        return "SysRoleMenuVO{" +
+                "id=" + id +
+                ", roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
+                ", menuId=" + menuId +
+                ", permission='" + permission + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", createdTime=" + createdTime +
+                ", updatedBy='" + updatedBy + '\'' +
+                ", updatedTime=" + updatedTime +
+                '}';
+    }
 }

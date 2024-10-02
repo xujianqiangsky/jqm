@@ -34,13 +34,15 @@ public class SysUserRoleVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "用户角色 id")
+    private Long id;
     @Schema(name = "userId", description = "用户 id")
     private Long userId;
     @Schema(name = "username", description = "用户名")
     private String username;
     @Schema(name = "roleId", description = "角色 id")
     private Long roleId;
-    @Schema(name = "name", description = "角色名称")
+    @Schema(name = "roleName", description = "角色名称")
     private String roleName;
     @Schema(name = "createdBy", description = "创建人")
     private String createdBy;
@@ -50,6 +52,14 @@ public class SysUserRoleVO implements Serializable {
     private String updatedBy;
     @Schema(name = "updatedTime", description = "更新时间")
     private LocalDateTime updatedTime;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUserId() {
         return userId;
@@ -119,18 +129,19 @@ public class SysUserRoleVO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SysUserRoleVO that)) return false;
-        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(roleId, that.roleId) && Objects.equals(roleName, that.roleName) && Objects.equals(createdBy, that.createdBy) && Objects.equals(createdTime, that.createdTime) && Objects.equals(updatedBy, that.updatedBy) && Objects.equals(updatedTime, that.updatedTime);
+        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(roleId, that.roleId) && Objects.equals(roleName, that.roleName) && Objects.equals(createdBy, that.createdBy) && Objects.equals(createdTime, that.createdTime) && Objects.equals(updatedBy, that.updatedBy) && Objects.equals(updatedTime, that.updatedTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, roleId, roleName, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, userId, username, roleId, roleName, createdBy, createdTime, updatedBy, updatedTime);
     }
 
     @Override
     public String toString() {
         return "SysUserRoleVO{" +
-                "userId=" + userId +
+                "id=" + id +
+                ", userId=" + userId +
                 ", username='" + username + '\'' +
                 ", roleId=" + roleId +
                 ", roleName='" + roleName + '\'' +

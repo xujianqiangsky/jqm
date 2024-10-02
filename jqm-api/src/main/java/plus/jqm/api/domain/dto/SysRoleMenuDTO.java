@@ -33,10 +33,24 @@ public class SysRoleMenuDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "角色菜单 id")
+    private Long id;
     @Schema(name = "roleId", description = "角色 id")
     private Long roleId;
+    @Schema(name = "roleName", description = "角色名称")
+    private String roleName;
     @Schema(name = "menuId", description = "菜单 id")
     private Long menuId;
+    @Schema(name = "permission", description = "权限")
+    private String permission;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getRoleId() {
         return roleId;
@@ -44,6 +58,14 @@ public class SysRoleMenuDTO implements Serializable {
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public Long getMenuId() {
@@ -54,23 +76,34 @@ public class SysRoleMenuDTO implements Serializable {
         this.menuId = menuId;
     }
 
+    public String getPermission() {
+        return permission;
+    }
+
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SysRoleMenuDTO that)) return false;
-        return Objects.equals(roleId, that.roleId) && Objects.equals(menuId, that.menuId);
+        return Objects.equals(id, that.id) && Objects.equals(roleId, that.roleId) && Objects.equals(roleName, that.roleName) && Objects.equals(menuId, that.menuId) && Objects.equals(permission, that.permission);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roleId, menuId);
+        return Objects.hash(id, roleId, roleName, menuId, permission);
     }
 
     @Override
     public String toString() {
         return "SysRoleMenuDTO{" +
-                "roleId=" + roleId +
+                "id=" + id +
+                ", roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
                 ", menuId=" + menuId +
+                ", permission='" + permission + '\'' +
                 '}';
     }
 }

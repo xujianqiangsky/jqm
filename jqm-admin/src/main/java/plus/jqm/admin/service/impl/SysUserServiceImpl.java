@@ -45,12 +45,6 @@ import java.util.Objects;
  */
 @Service
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
-    private final SysUserMapper userMapper;
-
-    public SysUserServiceImpl(SysUserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
-
     @Override
     public IPage<SysUserVO> listUsers(long pageNum, long pageSize) {
         IPage<SysUser> userPage = new Page<>(pageNum, pageSize);
@@ -81,7 +75,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUserDetailVO getUserDetailById(Long id) {
         SysUserDetailVO userDetailVO = new SysUserDetailVO();
         SysDeptVO deptVO = new SysDeptVO();
-        SysUserDetail userDetail = userMapper.getUserDetailById(id);
+        SysUserDetail userDetail = baseMapper.selectUserDetailById(id);
         if (userDetail != null) {
             // 数据拷贝
             BeanUtils.copyProperties(userDetail, userDetailVO);

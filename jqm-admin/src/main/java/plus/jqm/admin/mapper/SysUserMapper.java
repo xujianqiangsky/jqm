@@ -33,6 +33,6 @@ import java.util.List;
  */
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {
-    SysUserDetail getUserDetailById(@Param("id") Long id);
-    List<SysRolePermission> getRolePermissionByUserId(@Param("id") Long id);
+    SysUserDetail selectUserDetailById(@Param("id") Long id);
+    List<SysRolePermission> selectRolePermissionByUserId(@Param("id") Long id);
 }

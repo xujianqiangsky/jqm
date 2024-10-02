@@ -16,9 +16,11 @@ package plus.jqm.admin.service;
  * limitations under the License.
  */
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import plus.jqm.api.domain.SysRoleMenu;
 import plus.jqm.api.domain.dto.SysRoleMenuDTO;
+import plus.jqm.api.domain.vo.SysRoleMenuVO;
 
 import java.util.List;
 
@@ -30,4 +32,6 @@ import java.util.List;
  */
 public interface SysRoleMenuService extends IService<SysRoleMenu> {
     void saveRoleMenu(List<SysRoleMenuDTO> roleMenuDTOList);
+
+    IPage<SysRoleMenuVO> listRelations(long pageNum, long pageSize);
 }

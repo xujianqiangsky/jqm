@@ -16,9 +16,11 @@ package plus.jqm.admin.service;
  * limitations under the License.
  */
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import plus.jqm.api.domain.SysUserRole;
 import plus.jqm.api.domain.dto.SysUserRoleDTO;
+import plus.jqm.api.domain.vo.SysUserRoleVO;
 
 import java.util.List;
 
@@ -30,4 +32,6 @@ import java.util.List;
  */
 public interface SysUserRoleService extends IService<SysUserRole> {
     void saveUserRole(List<SysUserRoleDTO> userRoleDTOList);
+
+    IPage<SysUserRoleVO> listRelations(long pageNum, long pageSize);
 }

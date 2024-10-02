@@ -36,10 +36,18 @@ public class SysUserRole implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "用户角色 id")
+    private Long id;
     @Schema(name = "userId", description = "用户 id")
     private Long userId;
+    @Schema(name = "username", description = "用户名")
+    @TableField(exist = false)
+    private String username;
     @Schema(name = "roleId", description = "角色 id")
     private Long roleId;
+    @Schema(name = "roleName", description = "角色名称")
+    @TableField(exist = false)
+    private String roleName;
     @Schema(name = "createdBy", description = "创建人")
     @TableField(fill = FieldFill.INSERT)
     private String createdBy;
@@ -53,6 +61,14 @@ public class SysUserRole implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedTime;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getUserId() {
         return userId;
     }
@@ -61,12 +77,28 @@ public class SysUserRole implements Serializable {
         this.userId = userId;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Long getRoleId() {
         return roleId;
     }
 
     public void setRoleId(Long roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public String getCreatedBy() {
@@ -104,20 +136,23 @@ public class SysUserRole implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SysUserRole that)) return false;
-        return Objects.equals(userId, that.userId) && Objects.equals(roleId, that.roleId) && Objects.equals(createdBy, that.createdBy) && Objects.equals(createdTime, that.createdTime) && Objects.equals(updatedBy, that.updatedBy) && Objects.equals(updatedTime, that.updatedTime);
+        if (!(o instanceof SysUserRole userRole)) return false;
+        return Objects.equals(id, userRole.id) && Objects.equals(userId, userRole.userId) && Objects.equals(username, userRole.username) && Objects.equals(roleId, userRole.roleId) && Objects.equals(roleName, userRole.roleName) && Objects.equals(createdBy, userRole.createdBy) && Objects.equals(createdTime, userRole.createdTime) && Objects.equals(updatedBy, userRole.updatedBy) && Objects.equals(updatedTime, userRole.updatedTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, roleId, createdBy, createdTime, updatedBy, updatedTime);
+        return Objects.hash(id, userId, username, roleId, roleName, createdBy, createdTime, updatedBy, updatedTime);
     }
 
     @Override
     public String toString() {
         return "SysUserRole{" +
-                "userId=" + userId +
+                "id=" + id +
+                ", userId=" + userId +
+                ", username='" + username + '\'' +
                 ", roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
                 ", createdBy='" + createdBy + '\'' +
                 ", createdTime=" + createdTime +
                 ", updatedBy='" + updatedBy + '\'' +

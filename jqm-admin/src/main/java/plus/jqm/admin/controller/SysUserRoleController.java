@@ -17,15 +17,15 @@ package plus.jqm.admin.controller;
  */
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import plus.jqm.admin.service.SysUserRoleService;
 import plus.jqm.api.domain.dto.SysUserRoleDTO;
+import plus.jqm.api.domain.vo.SysUserRoleVO;
 import plus.jqm.common.core.domain.Result;
 
 import java.util.List;
@@ -44,11 +44,28 @@ public class SysUserRoleController {
 
     public SysUserRoleController(SysUserRoleService userRoleService) {this.userRoleService = userRoleService;}
 
+    @Operation(summary = "分页查询用户角色信息")
+    @SaCheckPermission("sys:user:role:view")
+    @GetMapping("/list/{pageNum}/{pageSize}")
+    public Result<IPage<SysUserRoleVO>> listRelations(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
+                                                      @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+        IPage<SysUserRoleVO> page = userRoleService.listRelations(pageNum, pageSize);
+        return Result.success(page);
+    }
+
     @Operation(summary = "保存用户角色信息")
     @SaCheckPermission("sys:user:role:add")
     @PostMapping
     public Result<String> saveUserRole(@RequestBody List<SysUserRoleDTO> userRoleDTOList) {
         userRoleService.saveUserRole(userRoleDTOList);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "删除用户角色信息")
+    @SaCheckPermission("sys:user:role:remove")
+    @DeleteMapping("/{id}")
+    public Result<String> deleteUserRole(@Parameter(name = "id", description = "用户角色 id") @PathVariable("id") Long id) {
+        userRoleService.removeById(id);
         return Result.success("ok");
     }
 }

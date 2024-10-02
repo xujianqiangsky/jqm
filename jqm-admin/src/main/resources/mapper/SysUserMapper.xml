@@ -145,7 +145,7 @@
         r.updated_time,
         m.permission
     </sql>
-    <select id="getUserDetailById" resultMap="userDetailMap">
+    <select id="selectUserDetailById" resultMap="userDetailMap">
         SELECT
         <include refid="userDetailSQL"/>
         FROM sys_user u
@@ -158,7 +158,7 @@
             u.id = #{id}
         </where>
     </select>
-    <select id="getRolePermissionByUserId" resultMap="rolePermissionMap">
+    <select id="selectRolePermissionByUserId" resultMap="rolePermissionMap">
         SELECT
         <include refid="rolePermissionSQL"/>
         FROM sys_user u

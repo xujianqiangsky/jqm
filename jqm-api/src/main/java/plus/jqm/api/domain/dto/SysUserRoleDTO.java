@@ -33,10 +33,24 @@ public class SysUserRoleDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Schema(name = "id", description = "用户角色 id")
+    private Long id;
     @Schema(name = "userId", description = "用户 id")
     private Long userId;
+    @Schema(name = "username", description = "用户名")
+    private String username;
     @Schema(name = "roleId", description = "角色 id")
     private Long roleId;
+    @Schema(name = "roleName", description = "角色名称")
+    private String roleName;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUserId() {
         return userId;
@@ -44,6 +58,14 @@ public class SysUserRoleDTO implements Serializable {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Long getRoleId() {
@@ -54,23 +76,34 @@ public class SysUserRoleDTO implements Serializable {
         this.roleId = roleId;
     }
 
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof SysUserRoleDTO that)) return false;
-        return Objects.equals(userId, that.userId) && Objects.equals(roleId, that.roleId);
+        return Objects.equals(id, that.id) && Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(roleId, that.roleId) && Objects.equals(roleName, that.roleName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, roleId);
+        return Objects.hash(id, userId, username, roleId, roleName);
     }
 
     @Override
     public String toString() {
         return "SysUserRoleDTO{" +
-                "userId=" + userId +
+                "id=" + id +
+                ", userId=" + userId +
+                ", username='" + username + '\'' +
                 ", roleId=" + roleId +
+                ", roleName='" + roleName + '\'' +
                 '}';
     }
 }

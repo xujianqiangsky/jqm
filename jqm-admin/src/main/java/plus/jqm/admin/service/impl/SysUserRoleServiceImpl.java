@@ -18,6 +18,8 @@ package plus.jqm.admin.service.impl;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,10 @@ import plus.jqm.admin.mapper.SysUserRoleMapper;
 import plus.jqm.admin.service.SysUserRoleService;
 import plus.jqm.api.domain.SysUserRole;
 import plus.jqm.api.domain.dto.SysUserRoleDTO;
+import plus.jqm.api.domain.vo.SysUserRoleVO;
 import plus.jqm.common.core.constant.cache.CacheConstants;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,6 +44,22 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
+    @Override
+    public IPage<SysUserRoleVO> listRelations(long pageNum, long pageSize) {
+        IPage<SysUserRole> userRolePage = new Page<>(pageNum, pageSize);
+        baseMapper.selectPage(userRolePage);
+        IPage<SysUserRoleVO> userRoleVOPage = new Page<>();
+        BeanUtils.copyProperties(userRolePage, userRoleVOPage, "records");
+        List<SysUserRoleVO> userRoleVOList = new ArrayList<>();
+        for (SysUserRole userRole : userRolePage.getRecords()) {
+            SysUserRoleVO userRoleVO = new SysUserRoleVO();
+            BeanUtils.copyProperties(userRole, userRoleVO);
+            userRoleVOList.add(userRoleVO);
+        }
+        userRoleVOPage.setRecords(userRoleVOList);
+        return userRoleVOPage;
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @SuppressWarnings("unchecked")
     @Override
@@ -47,6 +67,7 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
         List<SysUserRole> userRoleList = userRoleDTOList.stream()
                 .map(userRoleDTO -> {
                     SysUserRole sysUserRole = new SysUserRole();
+                    userRoleDTO.setId(null);
                     BeanUtils.copyProperties(userRoleDTO, sysUserRole);
                     return sysUserRole;
                 })

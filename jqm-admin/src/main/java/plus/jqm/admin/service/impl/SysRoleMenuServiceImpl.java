@@ -16,6 +16,10 @@ package plus.jqm.admin.service.impl;
  * limitations under the License.
  */
 
+import cn.dev33.satoken.SaManager;
+import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -24,8 +28,13 @@ import plus.jqm.admin.mapper.SysRoleMenuMapper;
 import plus.jqm.admin.service.SysRoleMenuService;
 import plus.jqm.api.domain.SysRoleMenu;
 import plus.jqm.api.domain.dto.SysRoleMenuDTO;
+import plus.jqm.api.domain.vo.SysRoleMenuVO;
+import plus.jqm.common.core.constant.cache.CacheConstants;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 用户菜单业务逻辑实现
@@ -35,18 +44,50 @@ import java.util.List;
  */
 @Service
 public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRoleMenu> implements SysRoleMenuService {
+    @Override
+    public IPage<SysRoleMenuVO> listRelations(long pageNum, long pageSize) {
+        IPage<SysRoleMenu> roleMenuPage = new Page<>(pageNum, pageSize);
+        baseMapper.selectPage(roleMenuPage);
+        IPage<SysRoleMenuVO> roleMenuVOPage = new Page<>();
+        BeanUtils.copyProperties(roleMenuPage, roleMenuVOPage, "records");
+        List<SysRoleMenuVO> userRoleVOList = new ArrayList<>();
+        for (SysRoleMenu roleMenu : roleMenuPage.getRecords()) {
+            SysRoleMenuVO roleMenuVO = new SysRoleMenuVO();
+            BeanUtils.copyProperties(roleMenu, roleMenuVO);
+            userRoleVOList.add(roleMenuVO);
+        }
+        roleMenuVOPage.setRecords(userRoleVOList);
+        return roleMenuVOPage;
+    }
+
     @Transactional(rollbackFor = Exception.class)
+    @SuppressWarnings("unchecked")
     @Override
     public void saveRoleMenu(List<SysRoleMenuDTO> roleMenuDTOList) {
         List<SysRoleMenu> roleMenuList = roleMenuDTOList.stream()
                 .map(roleMenuDTO -> {
                     SysRoleMenu roleMenu = new SysRoleMenu();
+                    roleMenuDTO.setId(null);
                     BeanUtils.copyProperties(roleMenuDTO, roleMenu);
                     return roleMenu;
                 })
                 .toList();
         saveBatch(roleMenuList);
 
-        // TODO 清除缓存权限
+        // 更新缓存权限
+        Map<String, List<SysRoleMenuDTO>> roleMenuDTOMap = roleMenuDTOList.stream()
+                .collect(Collectors.groupingBy(SysRoleMenuDTO::getRoleName));
+        roleMenuDTOMap.forEach((roleId, list) -> {
+            List<String> permissionList = (List<String>) SaManager.getSaTokenDao()
+                    .getObject(CacheConstants.PERMISSION_CACHE_KEY_PREFIX.getKey() + roleId);
+            if (permissionList != null) {
+                List<String> newPermissionList = list.stream()
+                        .map(SysRoleMenuDTO::getPermission)
+                        .toList();
+                permissionList.addAll(newPermissionList);
+                SaManager.getSaTokenDao()
+                        .setObject(CacheConstants.PERMISSION_CACHE_KEY_PREFIX.getKey() + roleId, permissionList, StpUtil.getTokenTimeout());
+            }
+        });
     }
 }

@@ -59,7 +59,7 @@ public class SysUserRemoteServiceImpl implements SysUserRemoteService {
     @Override
     public Result<List<SysRolePermissionDTO>> getUserRoleAndPermissionById(Long id) {
         List<SysRolePermissionDTO> rolePermissionDTOList = new ArrayList<>();
-        List<SysRolePermission> rolePermissionList = userMapper.getRolePermissionByUserId(id);
+        List<SysRolePermission> rolePermissionList = userMapper.selectRolePermissionByUserId(id);
         if (rolePermissionList != null) {
             for (SysRolePermission rolePermission : rolePermissionList) {
                 SysRolePermissionDTO rolePermissionDTO = new SysRolePermissionDTO();

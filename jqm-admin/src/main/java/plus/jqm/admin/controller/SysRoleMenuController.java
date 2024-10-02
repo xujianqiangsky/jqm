@@ -24,15 +24,15 @@ package plus.jqm.admin.controller;
  */
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import plus.jqm.admin.service.SysRoleMenuService;
 import plus.jqm.api.domain.dto.SysRoleMenuDTO;
+import plus.jqm.api.domain.vo.SysRoleMenuVO;
 import plus.jqm.common.core.domain.Result;
 
 import java.util.List;
@@ -45,11 +45,28 @@ public class SysRoleMenuController {
 
     public SysRoleMenuController(SysRoleMenuService roleMenuService) {this.roleMenuService = roleMenuService;}
 
+    @Operation(summary = "分页查询角色菜单信息")
+    @SaCheckPermission("sys:role:menu:view")
+    @GetMapping("/list/{pageNum}/{pageSize}")
+    public Result<IPage<SysRoleMenuVO>> listRelations(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
+                                                      @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+        IPage<SysRoleMenuVO> page = roleMenuService.listRelations(pageNum, pageSize);
+        return Result.success(page);
+    }
+
     @Operation(summary = "保存角色菜单信息")
     @SaCheckPermission("sys:role:menu:add")
     @PostMapping
     public Result<String> saveRoleMenu(@RequestBody List<SysRoleMenuDTO> roleMenuDTOList) {
         roleMenuService.saveRoleMenu(roleMenuDTOList);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "删除角色菜单信息")
+    @SaCheckPermission("sys:role:menu:remove")
+    @DeleteMapping("/{id}")
+    public Result<String> deleteRoleMenu(@Parameter(name = "id", description = "角色菜单 id") @PathVariable("id") Long id) {
+        roleMenuService.removeById(id);
         return Result.success("ok");
     }
 }
