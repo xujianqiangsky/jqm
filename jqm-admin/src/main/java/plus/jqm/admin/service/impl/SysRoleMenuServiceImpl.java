@@ -90,4 +90,20 @@ public class SysRoleMenuServiceImpl extends ServiceImpl<SysRoleMenuMapper, SysRo
             }
         });
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void removeRoleMenuById(Long id) {
+        SysRoleMenu roleMenu = baseMapper.selectRoleMenuById(id);
+        removeById(id);
+        if (roleMenu != null) {
+            List<String> permissionList = (List<String>) SaManager.getSaTokenDao()
+                    .getObject(CacheConstants.PERMISSION_CACHE_KEY_PREFIX.getKey() + roleMenu.getRoleName());
+            if (permissionList != null) {
+                permissionList.removeIf(permission -> permission.equals(roleMenu.getPermission()));
+                SaManager.getSaTokenDao()
+                        .setObject(CacheConstants.PERMISSION_CACHE_KEY_PREFIX.getKey() + roleMenu.getRoleName(), permissionList, StpUtil.getTokenTimeout());
+            }
+        }
+    }
 }

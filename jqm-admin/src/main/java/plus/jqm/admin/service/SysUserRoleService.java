@@ -34,4 +34,6 @@ public interface SysUserRoleService extends IService<SysUserRole> {
     void saveUserRole(List<SysUserRoleDTO> userRoleDTOList);
 
     IPage<SysUserRoleVO> listRelations(long pageNum, long pageSize);
+
+    void removeUserRoleById(Long id);
 }

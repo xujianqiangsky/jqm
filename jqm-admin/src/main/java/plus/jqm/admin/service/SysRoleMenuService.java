@@ -34,4 +34,6 @@ public interface SysRoleMenuService extends IService<SysRoleMenu> {
     void saveRoleMenu(List<SysRoleMenuDTO> roleMenuDTOList);
 
     IPage<SysRoleMenuVO> listRelations(long pageNum, long pageSize);
+
+    void removeRoleMenuById(Long id);
 }

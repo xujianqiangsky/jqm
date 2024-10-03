@@ -19,6 +19,7 @@ package plus.jqm.admin.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import plus.jqm.api.domain.SysUserRole;
 
 /**
@@ -30,4 +31,6 @@ import plus.jqm.api.domain.SysUserRole;
 @Mapper
 public interface SysUserRoleMapper extends BaseMapper<SysUserRole> {
     IPage<SysUserRole> selectPage(IPage<SysUserRole> page);
+
+    SysUserRole selectUserRoleById(@Param("id") Long id);
 }

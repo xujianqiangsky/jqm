@@ -64,8 +64,8 @@ public class SysUserRoleController {
     @Operation(summary = "删除用户角色信息")
     @SaCheckPermission("sys:user:role:remove")
     @DeleteMapping("/{id}")
-    public Result<String> deleteUserRole(@Parameter(name = "id", description = "用户角色 id") @PathVariable("id") Long id) {
-        userRoleService.removeById(id);
+    public Result<String> removeUserRole(@Parameter(name = "id", description = "用户角色 id") @PathVariable("id") Long id) {
+        userRoleService.removeUserRoleById(id);
         return Result.success("ok");
     }
 }

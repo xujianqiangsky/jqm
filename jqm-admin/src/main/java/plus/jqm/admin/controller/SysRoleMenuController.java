@@ -65,8 +65,8 @@ public class SysRoleMenuController {
     @Operation(summary = "删除角色菜单信息")
     @SaCheckPermission("sys:role:menu:remove")
     @DeleteMapping("/{id}")
-    public Result<String> deleteRoleMenu(@Parameter(name = "id", description = "角色菜单 id") @PathVariable("id") Long id) {
-        roleMenuService.removeById(id);
+    public Result<String> removeRoleMenu(@Parameter(name = "id", description = "角色菜单 id") @PathVariable("id") Long id) {
+        roleMenuService.removeRoleMenuById(id);
         return Result.success("ok");
     }
 }

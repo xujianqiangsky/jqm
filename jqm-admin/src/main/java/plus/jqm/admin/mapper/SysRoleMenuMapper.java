@@ -19,6 +19,7 @@ package plus.jqm.admin.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import plus.jqm.api.domain.SysRoleMenu;
 
 /**
@@ -30,4 +31,6 @@ import plus.jqm.api.domain.SysRoleMenu;
 @Mapper
 public interface SysRoleMenuMapper extends BaseMapper<SysRoleMenu> {
     IPage<SysRoleMenu> selectPage(IPage<SysRoleMenu> roleMenuPage);
+
+    SysRoleMenu selectRoleMenuById(@Param("id") Long id);
 }

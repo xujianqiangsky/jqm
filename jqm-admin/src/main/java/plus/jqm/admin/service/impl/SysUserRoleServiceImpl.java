@@ -86,4 +86,20 @@ public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUs
             }
         });
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void removeUserRoleById(Long id) {
+        SysUserRole userRole = baseMapper.selectUserRoleById(id);
+        removeById(id);
+        if (userRole != null) {
+            List<String> roleList = (List<String>) SaManager.getSaTokenDao()
+                    .getObject(CacheConstants.ROLE_CACHE_KEY_PREFIX.getKey() + userRole.getUserId());
+            if (roleList != null) {
+                roleList.removeIf(role -> role.equals(userRole.getRoleName()));
+                SaManager.getSaTokenDao()
+                        .setObject(CacheConstants.ROLE_CACHE_KEY_PREFIX.getKey() + userRole.getUserId(), roleList, StpUtil.getTokenTimeout());
+            }
+        }
+    }
 }
