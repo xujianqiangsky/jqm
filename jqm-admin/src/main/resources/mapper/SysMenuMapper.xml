@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright 2024 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="plus.jqm.admin.mapper.SysMenuMapper">
+    <resultMap id="menuMap" type="plus.jqm.api.domain.SysMenu">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="enName" column="en_name"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="permission" column="permission"/>
+        <result property="path" column="path"/>
+        <result property="icon" column="icon"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="type" column="type"/>
+        <result property="hidden" column="is_hidden"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="deleted" column="is_deleted"/>
+    </resultMap>
+    <sql id="menuSQL">
+        m.id,
+        m.name,
+        m.en_name,
+        m.parent_id,
+        m.permission,
+        m.path,
+        m.icon,
+        m.sort_order,
+        m.type,
+        m.is_hidden,
+        m.created_by,
+        m.created_time,
+        m.updated_by,
+        m.updated_time,
+        m.is_deleted
+    </sql>
+    <select id="selectMenuByUserId" resultMap="menuMap">
+        SELECT
+        <include refid="menuSQL"/>
+        FROM
+        sys_user u
+        INNER JOIN sys_user_role ur ON
+        u.id = ur.user_id
+        INNER JOIN sys_role_menu rm ON
+        ur.role_id = rm.role_id
+        INNER JOIN sys_menu m ON
+        rm.menu_id = m.id
+        <where>
+            u.id = #{userId}
+        </where>
+    </select>
+</mapper>

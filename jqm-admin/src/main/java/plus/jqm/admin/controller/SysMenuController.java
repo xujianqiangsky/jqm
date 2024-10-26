@@ -17,6 +17,7 @@ package plus.jqm.admin.controller;
  */
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,8 +26,11 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import plus.jqm.admin.service.SysMenuService;
 import plus.jqm.api.domain.dto.SysMenuDTO;
+import plus.jqm.api.domain.vo.SysMenuDetailVO;
 import plus.jqm.api.domain.vo.SysMenuVO;
 import plus.jqm.common.core.domain.Result;
+
+import java.util.List;
 
 /**
  * 菜单管理模块
@@ -48,7 +52,7 @@ public class SysMenuController {
     @SaCheckPermission("sys:menu:view")
     @GetMapping("/list/{pageNum}/{pageSize}")
     public Result<IPage<SysMenuVO>> listMenus(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
-                                                    @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+                                              @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
         IPage<SysMenuVO> page = menuService.listMenus(pageNum, pageSize);
         return Result.success(page);
     }
@@ -59,6 +63,13 @@ public class SysMenuController {
     public Result<SysMenuVO> getMenuById(@Parameter(name = "id", description = "菜单 id") @PathVariable("id") Long id) {
         SysMenuVO menuVO = menuService.getMenuById(id);
         return Result.success(menuVO);
+    }
+
+    @Operation(summary = "获取登录用户菜单信息")
+    @GetMapping("/detail")
+    public Result<List<SysMenuDetailVO>> getMenuByUserId() {
+        List<SysMenuDetailVO> userMenuVOList = menuService.getMenuByUserId(StpUtil.getLoginIdAsLong());
+        return Result.success(userMenuVOList);
     }
 
     @Operation(summary = "保存菜单信息")

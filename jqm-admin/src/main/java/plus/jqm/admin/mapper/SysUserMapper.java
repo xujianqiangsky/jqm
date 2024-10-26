@@ -17,6 +17,7 @@ package plus.jqm.admin.mapper;
  */
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import plus.jqm.api.domain.SysRolePermission;
@@ -34,5 +35,8 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUser> {
     SysUserDetail selectUserDetailById(@Param("id") Long id);
+
     List<SysRolePermission> selectRolePermissionByUserId(@Param("id") Long id);
+
+    IPage<SysUserDetail> pageUserDetails(IPage<SysUserDetail> page);
 }

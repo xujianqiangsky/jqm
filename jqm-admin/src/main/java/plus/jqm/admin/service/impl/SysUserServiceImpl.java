@@ -62,6 +62,24 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    public IPage<SysUserDetailVO> listUserDetails(long pageNum, long pageSize) {
+        IPage<SysUserDetail> userDetailPage = new Page<>(pageNum, pageSize);
+        baseMapper.pageUserDetails(userDetailPage);
+        IPage<SysUserDetailVO> userDetailVOPage = new Page<>();
+        BeanUtils.copyProperties(userDetailPage, userDetailVOPage, "records");
+        List<SysUserDetailVO> userDetailVOList = new ArrayList<>();
+        for (SysUserDetail userDetail : userDetailPage.getRecords()) {
+            SysUserDetailVO userDetailVO = new SysUserDetailVO();
+            SysDeptVO deptVO = new SysDeptVO();
+            // 数据拷贝
+            userDetailToUserDetailVO(userDetail, userDetailVO, deptVO);
+            userDetailVOList.add(userDetailVO);
+        }
+        userDetailVOPage.setRecords(userDetailVOList);
+        return userDetailVOPage;
+    }
+
+    @Override
     public SysUserVO getUserById(Long id) {
         SysUserVO userVO = new SysUserVO();
         SysUser user = getById(id);
@@ -78,28 +96,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserDetail userDetail = baseMapper.selectUserDetailById(id);
         if (userDetail != null) {
             // 数据拷贝
-            BeanUtils.copyProperties(userDetail, userDetailVO);
-            SysDept dept = userDetail.getDept();
-            if (dept != null) {
-                BeanUtils.copyProperties(dept, deptVO);
-            }
-            List<SysRole> roleList = userDetail.getRoleList();
-            List<SysMenu> menuList = userDetail.getMenuList();
-            ArrayList<SysRoleVO> roleVOList = new ArrayList<>(roleList.size());
-            ArrayList<SysMenuVO> menuVOList = new ArrayList<>(menuList.size());
-            for (SysRole role : roleList) {
-                SysRoleVO roleVO = new SysRoleVO();
-                BeanUtils.copyProperties(role, roleVO);
-                roleVOList.add(roleVO);
-            }
-            for (SysMenu menu : menuList) {
-                SysMenuVO menuVO = new SysMenuVO();
-                BeanUtils.copyProperties(menu, menuVO);
-                menuVOList.add(menuVO);
-            }
-            userDetailVO.setDept(deptVO);
-            userDetailVO.setRoleList(roleVOList);
-            userDetailVO.setMenuList(menuVOList);
+            userDetailToUserDetailVO(userDetail, userDetailVO, deptVO);
         }
         return userDetailVO;
     }
@@ -164,5 +161,30 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 throw new MobileNumberAlreadyExistsException();
             }
         }
+    }
+
+    private void userDetailToUserDetailVO(SysUserDetail userDetail, SysUserDetailVO userDetailVO, SysDeptVO deptVO) {
+        BeanUtils.copyProperties(userDetail, userDetailVO);
+        SysDept dept = userDetail.getDept();
+        if (dept != null) {
+            BeanUtils.copyProperties(dept, deptVO);
+        }
+        List<SysRole> roleList = userDetail.getRoleList();
+        List<SysMenu> menuList = userDetail.getMenuList();
+        ArrayList<SysRoleVO> roleVOList = new ArrayList<>(roleList.size());
+        ArrayList<SysMenuVO> menuVOList = new ArrayList<>(menuList.size());
+        for (SysRole role : roleList) {
+            SysRoleVO roleVO = new SysRoleVO();
+            BeanUtils.copyProperties(role, roleVO);
+            roleVOList.add(roleVO);
+        }
+        for (SysMenu menu : menuList) {
+            SysMenuVO menuVO = new SysMenuVO();
+            BeanUtils.copyProperties(menu, menuVO);
+            menuVOList.add(menuVO);
+        }
+        userDetailVO.setDept(deptVO);
+        userDetailVO.setRoleList(roleVOList);
+        userDetailVO.setMenuList(menuVOList);
     }
 }

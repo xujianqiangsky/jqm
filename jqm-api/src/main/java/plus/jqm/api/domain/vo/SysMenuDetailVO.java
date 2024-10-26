@@ -63,7 +63,7 @@ public class SysMenuDetailVO implements Serializable {
     @Schema(name = "updatedTime", description = "更新时间")
     private LocalDateTime updatedTime;
     @Schema(name = "children", description = "子菜单")
-    private List<SysMenuVO> children;
+    private List<SysMenuDetailVO> children;
 
     public Long getId() {
         return id;
@@ -177,11 +177,11 @@ public class SysMenuDetailVO implements Serializable {
         this.updatedTime = updatedTime;
     }
 
-    public List<SysMenuVO> getChildren() {
+    public List<SysMenuDetailVO> getChildren() {
         return children;
     }
 
-    public void setChildren(List<SysMenuVO> children) {
+    public void setChildren(List<SysMenuDetailVO> children) {
         this.children = children;
     }
 

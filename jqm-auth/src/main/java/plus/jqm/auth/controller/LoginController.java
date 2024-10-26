@@ -19,6 +19,7 @@ package plus.jqm.auth.controller;
 import cn.dev33.satoken.stp.StpUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import plus.jqm.auth.domain.LoginUser;
@@ -37,9 +38,11 @@ import plus.jqm.common.core.domain.Result;
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class LoginController {
     private final LoginService loginService;
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public LoginController(LoginService loginService) {
+    public LoginController(LoginService loginService, RedisTemplate<String, Object> redisTemplate) {
         this.loginService = loginService;
+        this.redisTemplate = redisTemplate;
     }
 
     /**
@@ -62,6 +65,7 @@ public class LoginController {
     @Operation(summary = "用户登出")
     @GetMapping("/logout")
     public Result<String> logout() {
+        redisTemplate.delete("jqm:jqm-admin:menu::" + StpUtil.getLoginId());
         StpUtil.logout(StpUtil.getLoginId(), StpUtil.getLoginDevice());
         return Result.success("ok");
     }

@@ -20,7 +20,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import plus.jqm.api.domain.SysMenu;
 import plus.jqm.api.domain.dto.SysMenuDTO;
+import plus.jqm.api.domain.vo.SysMenuDetailVO;
 import plus.jqm.api.domain.vo.SysMenuVO;
+
+import java.util.List;
 
 /**
  * 菜单业务逻辑接口
@@ -36,4 +39,6 @@ public interface SysMenuService extends IService<SysMenu> {
     void updateMenuById(SysMenuDTO menuDTO);
 
     IPage<SysMenuVO> listMenus(long pageNum, long pageSize);
+
+    List<SysMenuDetailVO> getMenuByUserId(long userId);
 }

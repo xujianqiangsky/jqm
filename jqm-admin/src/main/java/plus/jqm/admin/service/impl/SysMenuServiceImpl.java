@@ -16,20 +16,24 @@ package plus.jqm.admin.service.impl;
  * limitations under the License.
  */
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import plus.jqm.admin.exception.MenuNameAlreadyExistsException;
 import plus.jqm.admin.mapper.SysMenuMapper;
 import plus.jqm.admin.service.SysMenuService;
 import plus.jqm.api.domain.SysMenu;
 import plus.jqm.api.domain.dto.SysMenuDTO;
+import plus.jqm.api.domain.vo.SysMenuDetailVO;
 import plus.jqm.api.domain.vo.SysMenuVO;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -54,6 +58,38 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         }
         menuVOPage.setRecords(menuVOList);
         return menuVOPage;
+    }
+
+    @Cacheable("menu")
+    @Override
+    public List<SysMenuDetailVO> getMenuByUserId(long userId) {
+        List<SysMenu> menuList;
+        if (StpUtil.hasPermission("*")) {
+            LambdaQueryWrapper<SysMenu> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.ne(SysMenu::getName, "*");
+            menuList = list(queryWrapper);
+        } else {
+            menuList = baseMapper.selectMenuByUserId(userId);
+        }
+        List<SysMenuDetailVO> parentList = menuList.stream()
+                .filter(menu -> menu.getParentId() == null)
+                .map(menu -> {
+                    SysMenuDetailVO menuDetailVO = new SysMenuDetailVO();
+                    BeanUtils.copyProperties(menu, menuDetailVO);
+                    return menuDetailVO;
+                })
+                .sorted(Comparator.comparingInt(SysMenuDetailVO::getSortOrder))
+                .toList();
+        List<SysMenuDetailVO> children = menuList.stream()
+                .filter(menu -> menu.getParentId() != null)
+                .map(menu -> {
+                    SysMenuDetailVO menuDetailVO = new SysMenuDetailVO();
+                    BeanUtils.copyProperties(menu, menuDetailVO);
+                    return menuDetailVO;
+                })
+                .toList();
+        handleMenuDetail(parentList, children);
+        return parentList;
     }
 
     @Override
@@ -90,6 +126,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         SysMenu menu = getOne(queryWrapper);
         if (menu != null) {
             throw new MenuNameAlreadyExistsException();
+        }
+    }
+
+    private void handleMenuDetail(List<SysMenuDetailVO> parentList, List<SysMenuDetailVO> sourceList) {
+        for (SysMenuDetailVO parent : parentList) {
+            List<SysMenuDetailVO> children = sourceList.stream()
+                    .filter(child -> parent.getId().equals(child.getParentId()))
+                    .sorted(Comparator.comparingInt(SysMenuDetailVO::getSortOrder))
+                    .toList();
+            handleMenuDetail(children, sourceList);
+            parent.setChildren(children);
         }
     }
 }

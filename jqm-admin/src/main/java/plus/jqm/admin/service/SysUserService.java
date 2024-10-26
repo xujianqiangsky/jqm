@@ -43,4 +43,6 @@ public interface SysUserService extends IService<SysUser> {
     void updateLoginUserMobileNumber(SysUserDTO userDTO);
 
     IPage<SysUserVO> listUsers(long pageNum, long pageSize);
+
+    IPage<SysUserDetailVO> listUserDetails(long pageNum, long pageSize);
 }

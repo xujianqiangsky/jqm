@@ -72,14 +72,14 @@ public class AdminExceptionHandler {
         return Result.failure(UserErrorCode.MOBILE_NUMBER_ALREADY_EXISTS);
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = NotRoleException.class)
     public Result<Object> handleNotRoleException(NotRoleException exception) {
         LOG.warn("username: {} and msg: {}", SecurityUtils.getLoginUsername(), exception.getMessage(), exception);
         return Result.failure(AuthErrorCode.ACCESS_UNAUTHORIZED);
     }
 
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(value = NotPermissionException.class)
     public Result<Object> handleNotPermissionException(NotPermissionException exception) {
         LOG.warn("username: {} and msg: {}", SecurityUtils.getLoginUsername(), exception.getMessage(), exception);

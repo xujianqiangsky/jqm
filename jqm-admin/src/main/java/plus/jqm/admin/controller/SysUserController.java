@@ -55,6 +55,15 @@ public class SysUserController {
         return Result.success(page);
     }
 
+    @Operation(summary = "分页查询用户详细信息")
+    @SaCheckPermission("sys:user:view")
+    @GetMapping("/list/detail/{pageNum}/{pageSize}")
+    public Result<IPage<SysUserDetailVO>> listUserDetails(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
+                                              @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+        IPage<SysUserDetailVO> page = userService.listUserDetails(pageNum, pageSize);
+        return Result.success(page);
+    }
+
     @Operation(summary = "获取登录用户信息")
     @GetMapping
     public Result<SysUserVO> getLoginUserInfo() {
