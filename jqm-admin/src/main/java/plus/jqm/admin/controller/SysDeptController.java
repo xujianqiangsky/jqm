@@ -28,6 +28,8 @@ import plus.jqm.api.domain.dto.SysDeptDTO;
 import plus.jqm.api.domain.vo.SysDeptVO;
 import plus.jqm.common.core.domain.Result;
 
+import java.util.List;
+
 /**
  * 部门管理模块
  *
@@ -48,6 +50,14 @@ public class SysDeptController {
     public Result<IPage<SysDeptVO>> listDepartments(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
                                   @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
         IPage<SysDeptVO> deptVOList = deptService.listDepartments(pageNum, pageSize);
+        return Result.success(deptVOList);
+    }
+
+    @Operation(summary = "查询全部部门信息")
+    @SaCheckPermission("sys:dept:view")
+    @GetMapping("/list")
+    public Result<List<SysDeptVO>> listDepartments() {
+        List<SysDeptVO> deptVOList = deptService.listDepartments();
         return Result.success(deptVOList);
     }
 

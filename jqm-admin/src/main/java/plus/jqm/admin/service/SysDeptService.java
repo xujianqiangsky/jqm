@@ -22,6 +22,8 @@ import plus.jqm.api.domain.SysDept;
 import plus.jqm.api.domain.dto.SysDeptDTO;
 import plus.jqm.api.domain.vo.SysDeptVO;
 
+import java.util.List;
+
 /**
  * 部门业务逻辑接口
  *
@@ -36,4 +38,6 @@ public interface SysDeptService extends IService<SysDept> {
     void updateDeptById(SysDeptDTO deptDTO);
 
     IPage<SysDeptVO> listDepartments(long pageNum, long pageSize);
+
+    List<SysDeptVO> listDepartments();
 }

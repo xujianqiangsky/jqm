@@ -57,6 +57,18 @@ public class SysDeptServiceImpl extends ServiceImpl<SysDeptMapper, SysDept> impl
     }
 
     @Override
+    public List<SysDeptVO> listDepartments() {
+        List<SysDept> deptList = list();
+        List<SysDeptVO> deptVOList = new ArrayList<>();
+        for (SysDept sysDept : deptList) {
+            SysDeptVO sysDeptVO = new SysDeptVO();
+            BeanUtils.copyProperties(sysDept, sysDeptVO);
+            deptVOList.add(sysDeptVO);
+        }
+        return deptVOList;
+    }
+
+    @Override
     public SysDeptVO getDeptById(Long id) {
         SysDept dept = getById(id);
         SysDeptVO deptVO = new SysDeptVO();
