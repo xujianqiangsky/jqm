@@ -1,0 +1,29 @@
+server:
+  port: 12030
+
+spring:
+  application:
+    name: @project.artifactId@
+  profiles:
+    active: @profiles.active@
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_HOST:127.0.0.1}:${NACOS_PORT:8848}
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+  config:
+    import:
+      - nacos:application-${spring.profiles.active}.yaml
+      - nacos:${spring.application.name}-${spring.profiles.active}.yaml
+
+dubbo:
+  application:
+    name: ${spring.application.name}-dubbo
+  protocol:
+    name: dubbo
+    port: 12031
+  registry:
+    address: nacos://${spring.cloud.nacos.discovery.server-addr}
+    parameters:
+      namespace: fe1971f4-1554-4958-9474-c378951a5842

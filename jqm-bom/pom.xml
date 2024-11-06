@@ -43,6 +43,11 @@
                 <artifactId>jqm-gateway</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>plus.jqm</groupId>
+                <artifactId>jqm-oss</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

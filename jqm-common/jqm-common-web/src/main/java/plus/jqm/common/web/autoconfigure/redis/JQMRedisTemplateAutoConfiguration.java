@@ -18,6 +18,7 @@ package plus.jqm.common.web.autoconfigure.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -32,6 +33,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
  * @date 2024/09/10
  */
 @AutoConfiguration(before = RedisAutoConfiguration.class)
+@ConditionalOnClass(RedisConnectionFactory.class)
 public class JQMRedisTemplateAutoConfiguration {
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory, ObjectMapper objectMapper) {
