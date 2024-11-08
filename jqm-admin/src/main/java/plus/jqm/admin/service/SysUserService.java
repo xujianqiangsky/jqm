@@ -45,4 +45,6 @@ public interface SysUserService extends IService<SysUser> {
     IPage<SysUserVO> listUsers(long pageNum, long pageSize);
 
     IPage<SysUserDetailVO> listUserDetails(long pageNum, long pageSize);
+
+    void updateUserStatusById(Long id, Integer status);
 }

@@ -40,5 +40,6 @@ jqm
     ├── jqm-common-security -- Sa Token 共享权限配置
     └── jqm-common-web -- Web 共享配置
 ├── jqm-gateway -- 网关模块
+├── jqm-oss -- 对象存储模块
 └── jqm-register -- Nacos
 ```

@@ -34,6 +34,7 @@ import plus.jqm.auth.domain.LoginUser;
 import plus.jqm.auth.domain.vo.TokenInfoVO;
 import plus.jqm.auth.service.LoginService;
 import plus.jqm.common.core.constant.TokenExtraConstants;
+import plus.jqm.common.core.constant.UserStatus;
 import plus.jqm.common.core.domain.Result;
 import plus.jqm.common.security.constant.code.AuthErrorCode;
 
@@ -59,6 +60,11 @@ public class LoginServiceImpl implements LoginService {
         // 获取用户信息
         Result<SysUserDTO> userDTOResult = userRemoteService.getUserByUsername(loginUser.getUsername());
         SysUserDTO originalUser = userDTOResult.getData();
+
+        if (originalUser.getStatus() == UserStatus.LOCK.ordinal()) {
+            return Result.failure(AuthErrorCode.ACCOUNT_LOCK);
+        }
+
         if (StringUtils.isEmpty(originalUser.getUsername())) {
             LOG.warn("Username: {} and exception: Username not found.", loginUser.getUsername());
             return Result.failure(AuthErrorCode.USERNAME_OR_PASSWORD_ERROR);

@@ -50,7 +50,7 @@ public class SysUserController {
     @SaCheckPermission("sys:user:view")
     @GetMapping("/list/{pageNum}/{pageSize}")
     public Result<IPage<SysUserVO>> listUsers(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
-                                                    @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+                                              @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
         IPage<SysUserVO> page = userService.listUsers(pageNum, pageSize);
         return Result.success(page);
     }
@@ -59,7 +59,7 @@ public class SysUserController {
     @SaCheckPermission("sys:user:view")
     @GetMapping("/list/detail/{pageNum}/{pageSize}")
     public Result<IPage<SysUserDetailVO>> listUserDetails(@Parameter(name = "pageNum", description = "当前页码") @PathVariable("pageNum") long pageNum,
-                                              @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
+                                                          @Parameter(name = "pageSize", description = "分页显示条数") @PathVariable(value = "pageSize") long pageSize) {
         IPage<SysUserDetailVO> page = userService.listUserDetails(pageNum, pageSize);
         return Result.success(page);
     }
@@ -121,6 +121,22 @@ public class SysUserController {
     @PutMapping("/change")
     public Result<String> updateUserById(@RequestBody SysUserDTO userDTO) {
         userService.updateUserById(userDTO);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "根据 id 删除指定用户")
+    @SaCheckPermission("sys:user:remove")
+    @DeleteMapping("/{id}")
+    public Result<String> removeUserById(@Parameter(name = "id", description = "用户 id") @PathVariable("id") Long id) {
+        userService.removeById(id);
+        return Result.success("ok");
+    }
+
+    @Operation(summary = "根据 id 修改用户账户状态")
+    @SaCheckPermission("sys:user:edit")
+    @PutMapping("/status/{id}/{status}")
+    public Result<String> updateUserStatusById(@Parameter(name = "id", description = "用户 id") @PathVariable("id") Long id, @Parameter(name = "status", description = "用户账号状态") @PathVariable("status") Integer status) {
+        userService.updateUserStatusById(id, status);
         return Result.success("ok");
     }
 }

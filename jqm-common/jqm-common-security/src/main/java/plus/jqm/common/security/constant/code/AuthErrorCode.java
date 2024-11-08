@@ -27,6 +27,7 @@ import plus.jqm.common.core.constant.code.ErrorCode;
 public enum AuthErrorCode implements ErrorCode {
     NOT_LOGIN("A0201", "用户未登录"),
     USERNAME_OR_PASSWORD_ERROR("A0202", "用户名或密码错误"),
+    ACCOUNT_LOCK("A0203", "账号锁定"),
     ACCESS_UNAUTHORIZED("A0301", "访问未授权"),
     INVALID_SAME_TOKEN("A0302", "无效的 Same-Token"),
     ;

@@ -147,6 +147,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         updateById(user);
     }
 
+    @Override
+    public void updateUserStatusById(Long id, Integer status) {
+        SysUser user = getById(id);
+        if (user != null) {
+            user.setStatus(status);
+            updateById(user);
+        }
+    }
+
     public void checkUsernameAndMobileNumber(SysUserDTO userDTO, CheckCondition condition) {
         LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(SysUser::getUsername, userDTO.getUsername())

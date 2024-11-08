@@ -167,6 +167,9 @@
         LEFT OUTER JOIN sys_role r ON ur.role_id = r.id
         LEFT OUTER JOIN sys_role_menu rm ON r.id = rm.role_id
         LEFT OUTER JOIN sys_menu m ON rm.menu_id = m.id
+        <where>
+            u.is_deleted = 0
+        </where>
     </select>
     <select id="selectRolePermissionByUserId" resultMap="rolePermissionMap">
         SELECT
