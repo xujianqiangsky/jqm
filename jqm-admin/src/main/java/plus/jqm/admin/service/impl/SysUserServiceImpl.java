@@ -18,7 +18,6 @@ package plus.jqm.admin.service.impl;
 
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -157,18 +156,36 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     public void checkUsernameAndMobileNumber(SysUserDTO userDTO, CheckCondition condition) {
-        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(SysUser::getUsername, userDTO.getUsername())
-                .or()
-                .eq(SysUser::getMobileNumber, userDTO.getMobileNumber());
-        List<SysUser> userList = list(queryWrapper);
-        for (SysUser user : userList) {
-            if ((condition.equals(CheckCondition.ALL) || condition.equals(CheckCondition.USERNAME)) && Objects.equals(user.getUsername(), userDTO.getUsername())) {
-                throw new UsernameAlreadyExistsException();
-            }
-            if ((condition.equals(CheckCondition.ALL) || condition.equals(CheckCondition.MOBILE_NUMBER)) && Objects.equals(user.getMobileNumber(), userDTO.getMobileNumber())) {
-                throw new MobileNumberAlreadyExistsException();
-            }
+        List<SysUser> userList;
+        switch (condition) {
+            case ALL:
+                userList = baseMapper.checkUsernameAndMobileNumber(userDTO.getUsername(), userDTO.getMobileNumber());
+                for (SysUser user : userList) {
+                    if (Objects.equals(user.getUsername(), userDTO.getUsername())) {
+                        throw new UsernameAlreadyExistsException();
+                    }
+                    if (Objects.equals(user.getMobileNumber(), userDTO.getMobileNumber())) {
+                        throw new MobileNumberAlreadyExistsException();
+                    }
+                }
+                break;
+            case USERNAME:
+                userList = baseMapper.checkUsernameAndMobileNumber(userDTO.getUsername(), null);
+                for (SysUser user : userList) {
+                    if (Objects.equals(user.getUsername(), userDTO.getUsername())) {
+                        throw new UsernameAlreadyExistsException();
+                    }
+                }
+                break;
+            case MOBILE_NUMBER:
+                userList = baseMapper.checkUsernameAndMobileNumber(null, userDTO.getMobileNumber());
+                for (SysUser user : userList) {
+                    if (Objects.equals(user.getMobileNumber(), userDTO.getMobileNumber())) {
+                        throw new MobileNumberAlreadyExistsException();
+                    }
+                }
+                break;
+
         }
     }
 

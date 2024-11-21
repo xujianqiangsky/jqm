@@ -86,6 +86,25 @@
             <result property="value" column="permission"/>
         </collection>
     </resultMap>
+    <resultMap id="userMap" type="plus.jqm.api.domain.SysUser">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="name" column="name"/>
+        <result property="password" column="password"/>
+        <result property="salt" column="salt"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="gender" column="gender"/>
+        <result property="mobileNumber" column="mobile_number"/>
+        <result property="avatar" column="avatar"/>
+        <result property="email" column="email"/>
+        <result property="status" column="status"/>
+        <result property="createdBy" column="created_by"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="updatedBy" column="updated_by"/>
+        <result property="updatedTime" column="updated_time"/>
+        <result property="deleted" column="is_deleted"/>
+    </resultMap>
+
     <sql id="userDetailSQL">
         u.id,
         u.username,
@@ -145,6 +164,25 @@
         r.updated_time,
         m.permission
     </sql>
+    <sql id="userSQL">
+        u.id,
+        u.username,
+        u.name,
+        u.password,
+        u.salt,
+        u.dept_id,
+        u.gender,
+        u.mobile_number,
+        u.avatar,
+        u.email,
+        u.status,
+        u.created_by,
+        u.created_time,
+        u.updated_by,
+        u.updated_time,
+        u.is_deleted
+    </sql>
+
     <select id="selectUserDetailById" resultMap="userDetailMap">
         SELECT
         <include refid="userDetailSQL"/>
@@ -181,6 +219,20 @@
         LEFT OUTER JOIN sys_user u ON ur.user_id = u.id
         <where>
             u.id = #{id}
+        </where>
+    </select>
+    <select id="checkUsernameAndMobileNumber" resultMap="userMap">
+        SELECT
+        <include refid="userSQL"/>
+        FROM
+        sys_user u
+        <where>
+            <if test="username != null">
+                u.username = #{username}
+            </if>
+            <if test="mobileNumber != null">
+                OR u.mobile_number = #{mobileNumber}
+            </if>
         </where>
     </select>
 </mapper>

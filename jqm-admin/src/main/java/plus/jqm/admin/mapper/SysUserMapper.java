@@ -39,4 +39,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
     List<SysRolePermission> selectRolePermissionByUserId(@Param("id") Long id);
 
     IPage<SysUserDetail> pageUserDetails(IPage<SysUserDetail> page);
+
+    List<SysUser> checkUsernameAndMobileNumber(@Param("username") String username, @Param("mobileNumber") String mobileNumber);
 }
